@@ -167,8 +167,9 @@ compose_cmd ps
 
 echo ""
 echo "Skipper CMS deployment is complete."
-echo "Site:   http://<server-ip>:$(grep '^SITE_PUBLIC_PORT=' .env | cut -d= -f2)"
-echo "Admin:  http://<server-ip>:$(grep '^ADMIN_PUBLIC_PORT=' .env | cut -d= -f2)"
+echo "Site local target:  http://127.0.0.1:$(grep '^SITE_PUBLIC_PORT=' .env | cut -d= -f2)"
+echo "Admin local target: http://127.0.0.1:$(grep '^ADMIN_PUBLIC_PORT=' .env | cut -d= -f2)"
+echo "Expose them through your unified Nginx service on ports 80/443."
 echo ""
 echo "Useful commands:"
 echo "  cd ${APP_DIR}"

@@ -72,7 +72,7 @@ services:
     depends_on:
       - server
     ports:
-      - "${SITE_PUBLIC_PORT:-8888}:80"
+      - "127.0.0.1:${SITE_PUBLIC_PORT:-8888}:80"
 
   admin:
     build:
@@ -82,7 +82,7 @@ services:
     depends_on:
       - server
     ports:
-      - "${ADMIN_PUBLIC_PORT:-8889}:80"
+      - "127.0.0.1:${ADMIN_PUBLIC_PORT:-8889}:80"
 
 volumes:
   mysql_data:
