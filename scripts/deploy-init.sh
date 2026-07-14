@@ -4,6 +4,7 @@ set -Eeuo pipefail
 REPO_URL="${REPO_URL:-https://github.com/skippersky/skipper_cms.git}"
 APP_DIR="${APP_DIR:-/opt/skipper-cms}"
 BRANCH="${BRANCH:-main}"
+GIT_TIMEOUT_SECONDS="${GIT_TIMEOUT_SECONDS:-45}"
 
 log() {
   echo ""
@@ -47,9 +48,9 @@ set_env_value() {
 
 retry_git() {
   local attempt=1
-  local max_attempts=5
+  local max_attempts=3
 
-  until git -c http.version=HTTP/1.1 "$@"; do
+  until timeout "$GIT_TIMEOUT_SECONDS" git -c http.version=HTTP/1.1 "$@"; do
     if [ "$attempt" -ge "$max_attempts" ]; then
       echo "Git command failed after ${max_attempts} attempts."
       return 1
@@ -58,6 +59,38 @@ retry_git() {
     sleep $((attempt * 3))
     attempt=$((attempt + 1))
   done
+}
+
+update_from_archive() {
+  local archive_url="https://codeload.github.com/skippersky/skipper_cms/tar.gz/refs/heads/${BRANCH}"
+  local tmp_dir
+  local env_backup
+
+  if ! command_exists curl || ! command_exists tar; then
+    echo "curl and tar are required for archive fallback."
+    return 1
+  fi
+
+  log "Falling back to GitHub archive download"
+  tmp_dir="$(mktemp -d)"
+  env_backup="${tmp_dir}/env.backup"
+
+  if [ -f "${APP_DIR}/.env" ]; then
+    cp "${APP_DIR}/.env" "$env_backup"
+  fi
+
+  curl -fL --retry 5 --retry-delay 3 --connect-timeout 20 "$archive_url" -o "${tmp_dir}/source.tar.gz"
+  tar -xzf "${tmp_dir}/source.tar.gz" -C "$tmp_dir"
+
+  mkdir -p "$APP_DIR"
+  find "$APP_DIR" -mindepth 1 -maxdepth 1 ! -name ".env" -exec rm -rf {} +
+  cp -a "${tmp_dir}/skipper_cms-${BRANCH}/." "$APP_DIR/"
+
+  if [ -f "$env_backup" ]; then
+    cp "$env_backup" "${APP_DIR}/.env"
+  fi
+
+  rm -rf "$tmp_dir"
 }
 
 if ! command_exists git; then
@@ -82,12 +115,15 @@ mkdir -p "$(dirname "$APP_DIR")"
 
 if [ ! -d "$APP_DIR/.git" ]; then
   log "Cloning repository to ${APP_DIR}"
-  retry_git clone --depth 1 --single-branch --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
+  retry_git clone --depth 1 --single-branch --branch "$BRANCH" "$REPO_URL" "$APP_DIR" || update_from_archive
 else
   log "Updating repository in ${APP_DIR}"
-  retry_git -C "$APP_DIR" fetch --depth 1 origin "$BRANCH"
-  git -C "$APP_DIR" checkout "$BRANCH"
-  retry_git -C "$APP_DIR" pull --ff-only origin "$BRANCH"
+  if retry_git -C "$APP_DIR" fetch --depth 1 origin "$BRANCH"; then
+    git -C "$APP_DIR" checkout "$BRANCH"
+    retry_git -C "$APP_DIR" pull --ff-only origin "$BRANCH" || update_from_archive
+  else
+    update_from_archive
+  fi
 fi
 
 cd "$APP_DIR"
