@@ -26,6 +26,17 @@ compose_cmd() {
   fi
 }
 
+compose_build_plain() {
+  if docker compose version >/dev/null 2>&1; then
+    docker compose --progress=plain build "$@"
+  elif command_exists docker-compose; then
+    docker-compose build "$@"
+  else
+    echo "Docker Compose was not found. Please install docker compose plugin or docker-compose."
+    exit 1
+  fi
+}
+
 make_secret() {
   if command_exists openssl; then
     openssl rand -base64 36 | tr -d '\n'
@@ -113,9 +124,12 @@ fi
 
 mkdir -p "$(dirname "$APP_DIR")"
 
-if [ ! -d "$APP_DIR/.git" ]; then
+if [ ! -e "$APP_DIR" ]; then
   log "Cloning repository to ${APP_DIR}"
   retry_git clone --branch "$BRANCH" "$REPO_URL" "$APP_DIR" || update_from_archive
+elif [ ! -d "$APP_DIR/.git" ]; then
+  log "${APP_DIR} is not a Git repository; updating from GitHub archive"
+  update_from_archive
 else
   log "Updating repository in ${APP_DIR}"
   if retry_git -C "$APP_DIR" fetch origin "$BRANCH"; then
@@ -143,7 +157,7 @@ log "Pulling database images"
 compose_cmd pull mysql redis
 
 log "Building application images"
-compose_cmd build --progress=plain server site admin
+compose_build_plain server site admin
 
 log "Starting services"
 compose_cmd up -d
