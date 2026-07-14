@@ -115,12 +115,12 @@ mkdir -p "$(dirname "$APP_DIR")"
 
 if [ ! -d "$APP_DIR/.git" ]; then
   log "Cloning repository to ${APP_DIR}"
-  retry_git clone --depth 1 --single-branch --branch "$BRANCH" "$REPO_URL" "$APP_DIR" || update_from_archive
+  retry_git clone --branch "$BRANCH" "$REPO_URL" "$APP_DIR" || update_from_archive
 else
   log "Updating repository in ${APP_DIR}"
-  if retry_git -C "$APP_DIR" fetch --depth 1 origin "$BRANCH"; then
+  if retry_git -C "$APP_DIR" fetch origin "$BRANCH"; then
     git -C "$APP_DIR" checkout "$BRANCH"
-    retry_git -C "$APP_DIR" pull --ff-only origin "$BRANCH" || update_from_archive
+    git -C "$APP_DIR" reset --hard "origin/${BRANCH}"
   else
     update_from_archive
   fi
