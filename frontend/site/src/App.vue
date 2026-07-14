@@ -17,7 +17,7 @@ onBeforeUnmount(() => {
   <header class="site-header">
     <router-link class="brand tap-target" to="/" @click="open = false">
       <span class="brand-mark"></span>
-      <span>Skipper Hardware</span>
+      <span>恒展五金科技</span>
     </router-link>
     <button class="nav-toggle" type="button" aria-label="打开导航" @click="open = !open">
       <X v-if="open" :size="22" />
@@ -25,16 +25,16 @@ onBeforeUnmount(() => {
     </button>
     <nav class="desktop-nav">
       <router-link to="/">首页</router-link>
-      <router-link to="/company">公司展示</router-link>
-      <router-link to="/products">产品展示</router-link>
+      <router-link to="/company">关于我们</router-link>
+      <router-link to="/products">产品中心</router-link>
       <router-link to="/contact">联系我们</router-link>
     </nav>
   </header>
   <Transition name="drawer">
     <nav v-if="open" class="mobile-nav" @click="open = false">
       <router-link to="/">首页</router-link>
-      <router-link to="/company">公司展示</router-link>
-      <router-link to="/products">产品展示</router-link>
+      <router-link to="/company">关于我们</router-link>
+      <router-link to="/products">产品中心</router-link>
       <router-link to="/contact">联系我们</router-link>
     </nav>
   </Transition>
@@ -141,4 +141,3 @@ onBeforeUnmount(() => {
   }
 }
 </style>
-

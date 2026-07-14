@@ -4,9 +4,9 @@ import { ref } from 'vue'
 
 const drawerOpen = ref(false)
 const products = [
-  { name: 'CNC 精密连接件', material: 'SUS304', tolerance: '±0.01mm', treatment: '钝化' },
-  { name: '冲压五金支架', material: 'SPCC', tolerance: '±0.05mm', treatment: '电泳' },
-  { name: '铝合金散热结构件', material: '6061-T6', tolerance: '±0.02mm', treatment: '阳极氧化' },
+  { name: '工业设备散热', products: 'LED散热器、服务器散热器、液压一体散热器', method: '按图加工', value: '面向连续运行设备的稳定散热需求，重视结构强度、导热效率与批量一致性。' },
+  { name: '消费电子散热', products: '电脑散热器、电子散热片、CPU风冷散热器、PC风扇', method: '批量加工', value: '适配整机装配、工程打样和批量采购，帮助客户平衡散热性能与装配效率。' },
+  { name: '精密医疗/美容散热', products: '美容仪散热产品、医疗设备散热产品', method: '来图定制', value: '关注结构适配、外观一致性与长期供货稳定性，适合设备类产品配套。' },
 ]
 </script>
 
@@ -14,7 +14,7 @@ const products = [
   <main>
     <section class="section product-head">
       <div class="container">
-        <h1>产品展示</h1>
+        <h1>产品中心</h1>
         <button class="filter-button tap-target" type="button" @click="drawerOpen = true">
           <SlidersHorizontal :size="20" /> 筛选
         </button>
@@ -24,19 +24,20 @@ const products = [
       <div class="container product-layout">
         <aside class="desktop-filter">
           <strong>分类筛选</strong>
-          <button>精密 CNC</button>
-          <button>冲压件</button>
-          <button>表面处理件</button>
+          <button>工业设备散热</button>
+          <button>消费电子散热</button>
+          <button>医疗/美容散热</button>
         </aside>
         <div class="product-list">
           <article v-for="product in products" :key="product.name" class="product-card">
             <h2>{{ product.name }}</h2>
+            <p>{{ product.value }}</p>
             <div class="table-scroll">
               <table>
                 <tbody>
-                  <tr><th>材质</th><td>{{ product.material }}</td></tr>
-                  <tr><th>公差</th><td>{{ product.tolerance }}</td></tr>
-                  <tr><th>表面处理</th><td>{{ product.treatment }}</td></tr>
+                  <tr><th>覆盖产品</th><td>{{ product.products }}</td></tr>
+                  <tr><th>合作方式</th><td>{{ product.method }}</td></tr>
+                  <tr><th>采购价值</th><td>{{ product.value }}</td></tr>
                 </tbody>
               </table>
             </div>
@@ -50,12 +51,12 @@ const products = [
           <X :size="20" />
         </button>
         <strong>分类筛选</strong>
-        <button>精密 CNC</button>
-        <button>冲压件</button>
-        <button>表面处理件</button>
+        <button>工业设备散热</button>
+        <button>消费电子散热</button>
+        <button>医疗/美容散热</button>
       </div>
     </Transition>
-    <a class="inquiry-fab tap-target" href="/contact">立即询盘</a>
+    <a class="inquiry-fab tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">1688快速拿样</a>
   </main>
 </template>
 
@@ -107,12 +108,17 @@ h1 {
   font-size: 22px;
 }
 
+.product-card p {
+  color: $color-text-muted;
+  line-height: 1.7;
+}
+
 .table-scroll {
   overflow-x: auto;
 }
 
 table {
-  min-width: 460px;
+  min-width: 520px;
   width: 100%;
   border-collapse: collapse;
 }
@@ -194,4 +200,3 @@ th {
   }
 }
 </style>
-

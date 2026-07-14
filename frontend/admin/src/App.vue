@@ -1,7 +1,7 @@
 <template>
   <el-container class="admin-shell">
     <el-aside width="236px">
-      <div class="brand">Skipper CMS</div>
+      <div class="brand">恒展五金 CMS</div>
       <el-menu router default-active="/">
         <el-menu-item index="/">仪表盘</el-menu-item>
         <el-menu-item index="/products">产品管理</el-menu-item>
@@ -33,4 +33,3 @@
   border-right: 1px solid var(--el-border-color);
 }
 </style>
-

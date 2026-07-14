@@ -18,29 +18,29 @@ public class HomePageRenderer implements SitePageRenderer<SiteHomeResponse> {
 
     @Override
     public SiteHomeResponse render(String lang) {
-        SiteMediaResponse media = demoMedia(1L, "精密五金加工车间");
+        SiteMediaResponse media = demoMedia(1L, "深圳市恒展五金科技有限公司散热器生产加工现场");
         return new SiteHomeResponse(
                 new SiteHomeResponse.Hero(
-                        "精密五金制造",
-                        "面向工业设备、汽车零部件与高端定制件的可靠供应链伙伴",
+                        "20余年深耕散热器行业的源头工厂",
+                        "深圳市恒展五金科技有限公司，2012年成立，专注铝型材散热器及各类电子散热产品生产加工，是阿里巴巴诚信14年金牌商家。",
                         List.of(media)
                 ),
                 List.of(
-                        new SiteHomeResponse.Metric("加工精度", "±0.01mm"),
-                        new SiteHomeResponse.Metric("交付准时率", "98.6%"),
-                        new SiteHomeResponse.Metric("合作客户", "320+"),
-                        new SiteHomeResponse.Metric("质量体系", "ISO 9001")
+                        new SiteHomeResponse.Metric("行业深耕", "20余年"),
+                        new SiteHomeResponse.Metric("成立时间", "2012年"),
+                        new SiteHomeResponse.Metric("诚信通商家", "14年"),
+                        new SiteHomeResponse.Metric("生产加工", "十余年")
                 ),
                 List.of(
-                        new SiteProductCardResponse(1L, "CNC 精密连接件", "cnc-connector", "适用于高强度装配场景", "SUS304", "±0.01mm", media),
-                        new SiteProductCardResponse(2L, "冲压五金支架", "stamping-bracket", "批量稳定生产，支持定制表面处理", "SPCC", "±0.05mm", media),
-                        new SiteProductCardResponse(3L, "铝合金散热结构件", "aluminum-heat-sink", "轻量化结构与导热性能兼顾", "6061-T6", "±0.02mm", media)
+                        new SiteProductCardResponse(1L, "工业设备散热", "industrial-cooling", "覆盖LED散热器、服务器散热器、液压一体散热器，面向连续运行设备的稳定散热需求。", "铝型材", "按图加工", media),
+                        new SiteProductCardResponse(2L, "消费电子散热", "consumer-electronics-cooling", "覆盖电脑散热器、电子散热片、CPU风冷散热器、PC风扇，适配整机装配与批量采购。", "铝型材", "批量加工", media),
+                        new SiteProductCardResponse(3L, "医疗美容设备散热", "medical-beauty-cooling", "覆盖美容仪散热产品、医疗设备散热产品，重视结构适配、外观一致性与长期供货稳定性。", "铝型材", "来图定制", media)
                 ),
                 List.of(
-                        new SiteHomeResponse.News("新产线完成自动化升级", "auto-line-upgrade", "提升多品类五金件批量交付稳定性。"),
-                        new SiteHomeResponse.News("表面处理能力扩展", "surface-treatment", "新增阳极氧化、电泳与喷砂工艺组合。")
+                        new SiteHomeResponse.News("2012年成立的散热器源头工厂", "about-hengzhan", "十余年生产加工经验沉淀在选材、加工、交付与复购口碑中。"),
+                        new SiteHomeResponse.News("14年阿里诚信金牌商家", "alibaba-gold-supplier", "采购方可通过1688店铺在线核验工厂信息并快速沟通拿样。")
                 ),
-                List.of("ABB", "Bosch", "Siemens", "Midea", "Haier")
+                List.of("铝型材散热器", "电脑散热器", "电子散热片", "CPU风冷散热器", "PC风扇", "LED散热器", "服务器散热器", "液压一体散热器", "美容仪散热产品", "医疗设备散热产品")
         );
     }
 
@@ -58,4 +58,3 @@ public class HomePageRenderer implements SitePageRenderer<SiteHomeResponse> {
         );
     }
 }
-

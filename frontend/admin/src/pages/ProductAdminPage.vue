@@ -14,8 +14,7 @@
 
 <script setup lang="ts">
 const rows = [
-  { name: 'CNC 精密连接件', material: 'SUS304', tolerance: '±0.01mm', treatment: '钝化' },
-  { name: '冲压五金支架', material: 'SPCC', tolerance: '±0.05mm', treatment: '电泳' },
+  { name: '铝型材散热器', material: '铝型材', tolerance: '按图加工', treatment: '面向工业设备散热' },
+  { name: 'CPU风冷散热器', material: '铝型材', tolerance: '批量加工', treatment: '面向消费电子散热' },
 ]
 </script>
-

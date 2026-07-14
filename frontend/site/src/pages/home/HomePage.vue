@@ -10,15 +10,20 @@ onMounted(async () => {
     page.value = await getHomePage()
   } catch {
     page.value = {
-      hero: { title: '精密五金制造', subtitle: '可靠、稳定、可追溯的工业五金供应链', banners: [] },
+      hero: {
+        title: '20余年深耕散热器行业的源头工厂',
+        subtitle: '深圳市恒展五金科技有限公司，2012年成立，专注铝型材散热器及各类电子散热产品生产加工，是阿里巴巴诚信14年金牌商家。',
+        banners: [],
+      },
       metrics: [
-        { label: '加工精度', value: '±0.01mm' },
-        { label: '交付准时率', value: '98.6%' },
-        { label: '合作客户', value: '320+' },
+        { label: '行业深耕', value: '20余年' },
+        { label: '成立时间', value: '2012年' },
+        { label: '诚信通商家', value: '14年' },
+        { label: '生产加工', value: '十余年' },
       ],
       products: [],
       news: [],
-      partners: ['ABB', 'Bosch', 'Siemens', 'Midea'],
+      partners: ['铝型材散热器', '电脑散热器', '电子散热片', 'CPU风冷散热器'],
     }
   }
 })
@@ -29,13 +34,13 @@ onMounted(async () => {
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow">INDUSTRIAL HARDWARE</p>
+          <p class="eyebrow">HENGZHAN HEATSINK FACTORY</p>
           <h1>{{ page.hero.title }}</h1>
           <p class="lead">{{ page.hero.subtitle }}</p>
-          <router-link class="primary-action tap-target" to="/products">查看产品</router-link>
+          <a class="primary-action tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">1688在线验厂</a>
         </div>
         <div class="hero-media">
-          <ResponsiveImage :media="page.hero.banners[0]" fallback="/factory-placeholder.webp" alt="五金工厂车间" />
+          <ResponsiveImage :media="page.hero.banners[0]" fallback="/factory-placeholder.webp" alt="恒展五金散热器生产加工现场" />
         </div>
       </div>
     </section>
@@ -49,10 +54,25 @@ onMounted(async () => {
       </div>
     </section>
 
+    <section class="section about">
+      <div class="container about-grid">
+        <div>
+          <p class="eyebrow">ABOUT HENGZHAN</p>
+          <h2>把老客户愿意复购的稳定性，做进每一批散热产品</h2>
+        </div>
+        <div class="about-copy">
+          <p>深圳市恒展五金科技有限公司成立于<strong>2012年</strong>，长期专注铝型材散热器、电子散热片及各类设备散热产品的生产加工。公司深耕散热器行业<strong>20余年</strong>，以源头工厂身份服务B端采购、工程开发与供应链配套需求。</p>
+          <p>对于采购商和工程师而言，散热产品不只看样品，更看批量交付时的尺寸一致性、加工稳定性与沟通效率。恒展五金依托<strong>十余年生产加工经验</strong>，围绕来图加工、结构适配、批量生产与持续供货积累了大量老客户口碑。</p>
+          <p>同时，公司是阿里巴巴诚信<strong>14年</strong>金牌商家，采购方可通过1688店铺进一步核验工厂信息、沟通需求并快速拿样。</p>
+          <a class="text-link tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">查看14年金牌工厂实拍</a>
+        </div>
+      </div>
+    </section>
+
     <section class="section products">
       <div class="container">
         <div class="section-head">
-          <h2>核心产品</h2>
+          <h2>产品中心</h2>
           <router-link class="text-link tap-target" to="/products">全部产品</router-link>
         </div>
         <div class="product-grid">
@@ -63,9 +83,35 @@ onMounted(async () => {
               <p>{{ product.summary }}</p>
               <dl>
                 <div><dt>材质</dt><dd>{{ product.material }}</dd></div>
-                <div><dt>公差</dt><dd>{{ product.tolerance }}</dd></div>
+                <div><dt>加工方式</dt><dd>{{ product.tolerance }}</dd></div>
               </dl>
             </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section why">
+      <div class="container">
+        <div class="section-head">
+          <h2>为什么选择我们</h2>
+        </div>
+        <div class="why-grid">
+          <article>
+            <strong>源头工厂，沟通更直接</strong>
+            <p>围绕铝型材散热器及电子散热产品生产加工，减少中间沟通损耗，更适合工程打样与批量采购衔接。</p>
+          </article>
+          <article>
+            <strong>14年诚信通记录可核验</strong>
+            <p>通过1688店铺沉淀长期经营记录，让采购方在下单前多一层可验证的信任依据。</p>
+          </article>
+          <article>
+            <strong>实体地址清晰可追溯</strong>
+            <p>工厂地址位于中国广东省东莞市黄江镇合路村创业三路11号芙光科技园B座1楼。</p>
+          </article>
+          <article>
+            <strong>老客户口碑验证</strong>
+            <p>长期服务复购客户，靠稳定加工、务实沟通和持续供货建立合作基础。</p>
           </article>
         </div>
       </div>
@@ -89,8 +135,17 @@ onMounted(async () => {
   background: linear-gradient(180deg, $mobile-panel, $mobile-bg);
 }
 
-.hero-grid {
+.hero-grid,
+.metric-grid,
+.product-grid,
+.partner-grid,
+.about-grid,
+.why-grid {
   display: grid;
+  gap: 14px;
+}
+
+.hero-grid {
   gap: 28px;
 }
 
@@ -103,12 +158,22 @@ onMounted(async () => {
 h1 {
   margin: 0;
   font-family: $font-title;
-  font-size: clamp(38px, 14vw, 62px);
+  font-size: clamp(36px, 13vw, 62px);
   line-height: 1;
   letter-spacing: 0;
 }
 
-.lead {
+h2 {
+  margin: 0;
+  font-size: clamp(26px, 8vw, 42px);
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.lead,
+.about-copy,
+.product-card p,
+.why-grid p {
   color: $color-text-muted;
   line-height: 1.7;
 }
@@ -125,10 +190,17 @@ h1 {
   font-weight: 800;
 }
 
-.hero-media {
-  overflow: hidden;
+.hero-media,
+.metric-card,
+.product-card,
+.why-grid article,
+.partner-grid span {
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: $mobile-panel;
+}
+
+.hero-media {
+  overflow: hidden;
 }
 
 .hero-media img {
@@ -137,21 +209,8 @@ h1 {
   object-fit: cover;
 }
 
-.metric-grid,
-.product-grid,
-.partner-grid {
-  display: grid;
-  gap: 14px;
-}
-
 .metric-card,
-.product-card,
-.partner-grid span {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: $mobile-panel;
-}
-
-.metric-card {
+.why-grid article {
   padding: 18px;
 }
 
@@ -162,8 +221,14 @@ h1 {
   color: $color-accent;
 }
 
-.metric-card span {
+.metric-card span,
+dt {
   color: $color-text-muted;
+}
+
+.about-copy strong,
+.why-grid strong {
+  color: $color-text;
 }
 
 .section-head {
@@ -171,6 +236,7 @@ h1 {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  margin-bottom: 18px;
 }
 
 .product-card {
@@ -183,11 +249,6 @@ h1 {
 
 .product-card h3 {
   margin: 0 0 8px;
-}
-
-.product-card p {
-  color: $color-text-muted;
-  line-height: 1.6;
 }
 
 dl {
@@ -203,10 +264,6 @@ dl div {
   font-family: $font-data;
 }
 
-dt {
-  color: $color-text-muted;
-}
-
 dd {
   margin: 0;
 }
@@ -219,13 +276,16 @@ dd {
   min-height: 64px;
   display: grid;
   place-items: center;
+  padding: 12px;
   color: $color-text-muted;
   font-family: $font-data;
+  text-align: center;
 }
 
 @media (min-width: $breakpoint-md) {
   .metric-grid,
-  .product-grid {
+  .product-grid,
+  .why-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -246,9 +306,13 @@ dd {
     align-items: center;
   }
 
+  .about-grid {
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 42px;
+  }
+
   .product-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 </style>
-

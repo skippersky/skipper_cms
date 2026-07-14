@@ -3,19 +3,23 @@
     <section class="section contact-head">
       <div class="container">
         <h1>联系我们</h1>
+        <p class="lead">工厂地址：中国广东省东莞市黄江镇合路村创业三路11号芙光科技园B座1楼</p>
       </div>
     </section>
     <section class="section">
       <div class="container contact-grid">
-        <div class="map">MAP</div>
+        <div class="map">
+          <strong>实体工厂地址</strong>
+          <span>中国广东省东莞市黄江镇合路村创业三路11号芙光科技园B座1楼</span>
+        </div>
         <form class="contact-form">
           <input type="text" placeholder="公司名称" />
           <input type="text" placeholder="联系人" />
           <input type="tel" placeholder="联系电话" />
           <input type="email" placeholder="邮箱" />
-          <textarea placeholder="需求描述"></textarea>
+          <textarea placeholder="请描述散热产品类型、图纸、数量或交付需求"></textarea>
           <button class="tap-target" type="button">提交留言</button>
-          <a class="tel tap-target" href="tel:+8600000000000">一键拨打</a>
+          <a class="tel tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">1688在线验厂 / 快速拿样</a>
         </form>
       </div>
     </section>
@@ -38,6 +42,12 @@ h1 {
   letter-spacing: 0;
 }
 
+.lead {
+  max-width: 760px;
+  color: $color-text-muted;
+  line-height: 1.7;
+}
+
 .contact-grid {
   display: grid;
   gap: 18px;
@@ -46,9 +56,15 @@ h1 {
 .map {
   min-height: 260px;
   display: grid;
-  place-items: center;
+  align-content: center;
+  gap: 12px;
+  padding: 24px;
   color: $color-text-muted;
   font-family: $font-data;
+}
+
+.map strong {
+  color: $color-text;
 }
 
 .contact-form {
@@ -92,4 +108,3 @@ button,
   }
 }
 </style>
-
