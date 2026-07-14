@@ -40,6 +40,21 @@ set_env_value() {
   fi
 }
 
+retry_git() {
+  local attempt=1
+  local max_attempts=5
+
+  until git -c http.version=HTTP/1.1 "$@"; do
+    if [ "$attempt" -ge "$max_attempts" ]; then
+      echo "Git command failed after ${max_attempts} attempts."
+      return 1
+    fi
+    echo "Git network command failed. Retrying in $((attempt * 3)) seconds... (${attempt}/${max_attempts})"
+    sleep $((attempt * 3))
+    attempt=$((attempt + 1))
+  done
+}
+
 if ! command_exists git; then
   echo "git was not found. Please install git first."
   exit 1
@@ -53,11 +68,11 @@ fi
 mkdir -p "$(dirname "$APP_DIR")"
 
 if [ ! -d "$APP_DIR/.git" ]; then
-  git clone --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
+  retry_git clone --depth 1 --single-branch --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
 else
-  git -C "$APP_DIR" fetch origin "$BRANCH"
+  retry_git -C "$APP_DIR" fetch --depth 1 origin "$BRANCH"
   git -C "$APP_DIR" checkout "$BRANCH"
-  git -C "$APP_DIR" pull --ff-only origin "$BRANCH"
+  retry_git -C "$APP_DIR" pull --ff-only origin "$BRANCH"
 fi
 
 cd "$APP_DIR"
