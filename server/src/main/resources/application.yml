@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${CMS_DB_URL:jdbc:mysql://localhost:3306/skipper_cms?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
+    username: ${CMS_DB_USERNAME:root}
+    password: ${CMS_DB_PASSWORD:root}
+  data:
+    redis:
+      host: ${CMS_REDIS_HOST:localhost}
+      port: ${CMS_REDIS_PORT:6379}
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 50MB
+
+cms:
+  cors:
+    allowed-origins: ${CMS_CORS_ALLOWED_ORIGINS:*}
+  jwt:
+    secret: ${CMS_JWT_SECRET:change-me-change-me-change-me-change-me}
+    expiration-minutes: 720
+  upload:
+    root-path: ${CMS_UPLOAD_ROOT:uploads}
+    public-prefix: ${CMS_UPLOAD_PREFIX:/uploads}
+  rate-limit:
+    site-capacity: 100
+    site-refill-per-second: 100
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
