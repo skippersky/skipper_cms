@@ -5,6 +5,11 @@ REPO_URL="${REPO_URL:-https://github.com/skippersky/skipper_cms.git}"
 APP_DIR="${APP_DIR:-/opt/skipper-cms}"
 BRANCH="${BRANCH:-main}"
 
+log() {
+  echo ""
+  echo "==> $*"
+}
+
 command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
@@ -65,11 +70,21 @@ if ! command_exists docker; then
   exit 1
 fi
 
+log "Docker version"
+docker --version
+if docker compose version >/dev/null 2>&1; then
+  docker compose version
+elif command_exists docker-compose; then
+  docker-compose --version
+fi
+
 mkdir -p "$(dirname "$APP_DIR")"
 
 if [ ! -d "$APP_DIR/.git" ]; then
+  log "Cloning repository to ${APP_DIR}"
   retry_git clone --depth 1 --single-branch --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
 else
+  log "Updating repository in ${APP_DIR}"
   retry_git -C "$APP_DIR" fetch --depth 1 origin "$BRANCH"
   git -C "$APP_DIR" checkout "$BRANCH"
   retry_git -C "$APP_DIR" pull --ff-only origin "$BRANCH"
@@ -78,6 +93,7 @@ fi
 cd "$APP_DIR"
 
 if [ ! -f .env ]; then
+  log "Creating .env"
   cp .env.example .env
   set_env_value "MYSQL_ROOT_PASSWORD" "$(make_secret)"
   set_env_value "MYSQL_PASSWORD" "$(make_secret)"
@@ -87,8 +103,17 @@ fi
 set_env_value "SITE_PUBLIC_PORT" "8888"
 set_env_value "ADMIN_PUBLIC_PORT" "8889"
 
+log "Pulling database images"
 compose_cmd pull mysql redis
-compose_cmd up -d --build
+
+log "Building application images"
+compose_cmd build --progress=plain server site admin
+
+log "Starting services"
+compose_cmd up -d
+
+log "Service status"
+compose_cmd ps
 
 echo ""
 echo "Skipper CMS deployment is complete."
