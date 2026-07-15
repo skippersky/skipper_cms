@@ -273,7 +273,8 @@ dt {
 .product-card :deep(img) {
   width: 100%;
   aspect-ratio: 16 / 10;
-  object-fit: cover;
+  object-fit: contain;
+  background: #eef8fb;
 }
 
 .product-card > div {
