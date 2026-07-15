@@ -54,32 +54,37 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   min-height: 64px;
   padding: 0 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(24, 24, 40, 0.94);
-  backdrop-filter: blur(12px);
+  border-bottom: 1px solid $color-line;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 28px rgba(47, 91, 109, 0.08);
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  color: $color-text;
   font-family: $font-title;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .brand-mark {
-  width: 28px;
-  height: 28px;
-  border: 2px solid $color-accent;
-  background: linear-gradient(135deg, $color-accent-deep, $mobile-panel);
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(47, 155, 179, 0.34);
+  background:
+    repeating-linear-gradient(90deg, #d7e7eb 0 3px, #ffffff 3px 6px),
+    linear-gradient(135deg, $color-accent-deep, $color-accent);
+  box-shadow: inset 0 0 0 4px rgba(102, 207, 160, 0.18);
 }
 
 .nav-toggle {
   display: inline-grid;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid $color-line;
   color: $color-text;
-  background: $mobile-panel;
+  background: #ffffff;
 }
 
 .desktop-nav {
@@ -94,16 +99,17 @@ onBeforeUnmount(() => {
   align-content: start;
   gap: 6px;
   padding: 24px 16px;
-  background: rgba(24, 24, 40, 0.98);
+  background: rgba(246, 252, 252, 0.98);
 }
 
 .mobile-nav a {
   min-height: $touch-target-min;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid $color-line;
+  color: $color-text;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .drawer-enter-active,
@@ -120,7 +126,6 @@ onBeforeUnmount(() => {
   .site-header {
     min-height: 76px;
     padding: 0 48px;
-    background: rgba(26, 26, 46, 0.86);
   }
 
   .nav-toggle {
@@ -130,14 +135,14 @@ onBeforeUnmount(() => {
   .desktop-nav {
     display: flex;
     gap: 28px;
-    font-weight: 700;
+    font-weight: 800;
     color: $color-text-muted;
   }
 
   .desktop-nav a:hover,
   .desktop-nav a:focus,
   .desktop-nav a.router-link-active {
-    color: $color-text;
+    color: $color-accent-deep;
   }
 }
 </style>

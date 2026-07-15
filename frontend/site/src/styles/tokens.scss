@@ -1,12 +1,15 @@
-$color-bg: #1a1a2e;
-$color-panel: #16213e;
-$color-accent: #e94560;
-$color-accent-deep: #0f3460;
-$color-text: #e0e0e0;
-$color-text-muted: #a0a0a0;
-$mobile-bg: #181828;
-$mobile-panel: #151f38;
-$mobile-metal-sheen: rgba(255, 255, 255, 0.06);
+$color-bg: #eef7fb;
+$color-panel: #ffffff;
+$color-accent: #66cfa0;
+$color-accent-deep: #2f9bb3;
+$color-text: #173142;
+$color-text-muted: #5f7480;
+$mobile-bg: #f4fbf8;
+$mobile-panel: #ffffff;
+$mobile-metal-sheen: rgba(47, 155, 179, 0.08);
+$color-line: #c8e2e7;
+$color-steel: #d7e7eb;
+$color-warm: #fff8ed;
 
 $font-title: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
 $font-body: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -26,4 +29,3 @@ $caption-font-size-min: 14px;
 $motion-mechanical-fast: 200ms;
 $motion-mechanical-normal: 260ms;
 $motion-easing-linear: linear;
-

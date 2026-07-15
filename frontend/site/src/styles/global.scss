@@ -14,7 +14,11 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  background: $mobile-bg;
+  background:
+    linear-gradient(90deg, rgba(47, 155, 179, 0.045) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(102, 207, 160, 0.04) 1px, transparent 1px),
+    $mobile-bg;
+  background-size: 28px 28px;
 }
 
 body.nav-locked {
@@ -66,11 +70,14 @@ img {
 
 @media (min-width: $breakpoint-lg) {
   body {
-    background: $color-bg;
+    background:
+      linear-gradient(90deg, rgba(47, 155, 179, 0.045) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(102, 207, 160, 0.04) 1px, transparent 1px),
+      $color-bg;
+    background-size: 36px 36px;
   }
 
   .section {
     padding: 82px 0;
   }
 }
-

@@ -40,6 +40,7 @@ function logout() {
 <style scoped lang="scss">
 .admin-shell {
   min-height: 100vh;
+  background: #eef7fb;
 }
 
 .brand {
@@ -47,11 +48,13 @@ function logout() {
   display: flex;
   align-items: center;
   padding: 0 20px;
-  font-weight: 800;
+  color: #173142;
+  font-weight: 900;
 }
 
 .el-aside {
-  border-right: 1px solid var(--el-border-color);
+  background: #ffffff;
+  border-right: 1px solid #c8e2e7;
 }
 
 .topbar {
@@ -60,5 +63,6 @@ function logout() {
   align-items: center;
   gap: 12px;
   margin-bottom: 16px;
+  color: #173142;
 }
 </style>

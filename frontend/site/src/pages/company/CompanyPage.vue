@@ -28,12 +28,14 @@
 
 /* MOBILE-FIRST */
 .company-hero {
-  background: $mobile-panel;
+  border-bottom: 1px solid $color-line;
+  background: linear-gradient(135deg, #f7fcff, #f2fff8);
 }
 
 .eyebrow {
-  color: $color-accent;
+  color: $color-accent-deep;
   font-family: $font-data;
+  font-weight: 800;
 }
 
 h1 {
@@ -52,8 +54,15 @@ h1 {
 }
 
 .lead strong {
-  color: $color-text;
+  color: $color-accent-deep;
   font-family: $font-data;
+}
+
+.story {
+  padding: 22px;
+  border: 1px solid $color-line;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
 }
 
 .timeline {
@@ -62,10 +71,12 @@ h1 {
 }
 
 .timeline article {
-  min-height: 88px;
+  min-height: 96px;
   padding: 20px;
-  border-left: 3px solid $color-accent;
-  background: $mobile-panel;
+  border-left: 4px solid $color-accent;
+  border-top: 1px solid $color-line;
+  background: #ffffff;
+  box-shadow: 0 14px 34px rgba(47, 91, 109, 0.08);
 }
 
 @media (min-width: $breakpoint-lg) {
@@ -75,7 +86,7 @@ h1 {
 
   .timeline article {
     border-left: 0;
-    border-top: 3px solid $color-accent;
+    border-top: 4px solid $color-accent;
   }
 }
 </style>

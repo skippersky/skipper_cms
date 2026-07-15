@@ -65,7 +65,8 @@ const products = [
 
 /* MOBILE-FIRST */
 .product-head {
-  background: $mobile-panel;
+  border-bottom: 1px solid $color-line;
+  background: linear-gradient(135deg, #f7fcff, #f2fff8);
 }
 
 h1 {
@@ -82,9 +83,9 @@ h1 {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid $color-line;
   color: $color-text;
-  background: $mobile-panel;
+  background: #ffffff;
   font: inherit;
 }
 
@@ -98,9 +99,20 @@ h1 {
 }
 
 .product-card {
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: $mobile-panel;
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+  border: 1px solid $color-line;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
+}
+
+.product-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 7px;
+  content: "";
+  background: repeating-linear-gradient(180deg, $color-accent-deep 0 8px, $color-accent 8px 16px);
 }
 
 .product-card h2 {
@@ -127,12 +139,12 @@ th,
 td {
   min-height: 44px;
   padding: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid $color-line;
   text-align: left;
 }
 
 th {
-  color: $color-text-muted;
+  color: $color-accent-deep;
 }
 
 .filter-drawer {
@@ -142,8 +154,9 @@ th {
   display: grid;
   gap: 12px;
   padding: 20px 16px 28px;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  background: $mobile-panel;
+  border-top: 1px solid $color-line;
+  background: #ffffff;
+  box-shadow: 0 -18px 44px rgba(47, 91, 109, 0.12);
 }
 
 .close {
@@ -156,8 +169,8 @@ th {
   bottom: 16px;
   z-index: 25;
   padding: 0 18px;
-  border-color: $color-accent;
-  background: $color-accent;
+  border-color: #48b98b;
+  background: linear-gradient(180deg, #8ee5bc, $color-accent);
   font-weight: 800;
 }
 
@@ -192,7 +205,9 @@ th {
     gap: 12px;
     height: fit-content;
     padding: 18px;
-    background: $color-panel;
+    border: 1px solid $color-line;
+    background: #ffffff;
+    box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
   }
 
   .product-list {

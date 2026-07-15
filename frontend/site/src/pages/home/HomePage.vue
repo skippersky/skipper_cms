@@ -40,6 +40,9 @@ onMounted(async () => {
           <a class="primary-action tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">1688在线验厂</a>
         </div>
         <div class="hero-media">
+          <div class="heat-sink-visual" aria-hidden="true">
+            <span v-for="index in 11" :key="index"></span>
+          </div>
           <ResponsiveImage :media="page.hero.banners[0]" fallback="/factory-placeholder.webp" alt="恒展五金散热器生产加工现场" />
         </div>
       </div>
@@ -130,9 +133,12 @@ onMounted(async () => {
 
 /* MOBILE-FIRST */
 .hero {
-  min-height: 50vh;
-  padding: 48px 0 32px;
-  background: linear-gradient(180deg, $mobile-panel, $mobile-bg);
+  min-height: 58vh;
+  padding: 56px 0 40px;
+  background:
+    radial-gradient(circle at 80% 10%, rgba(102, 207, 160, 0.22), transparent 30%),
+    linear-gradient(135deg, #f7fcff 0%, #edf8fb 52%, #f6fff7 100%);
+  border-bottom: 1px solid $color-line;
 }
 
 .hero-grid,
@@ -146,27 +152,29 @@ onMounted(async () => {
 }
 
 .hero-grid {
-  gap: 28px;
+  gap: 30px;
 }
 
 .eyebrow {
-  color: $color-accent;
+  color: $color-accent-deep;
   font-family: $font-data;
   font-size: 14px;
+  font-weight: 800;
 }
 
 h1 {
   margin: 0;
+  max-width: 760px;
   font-family: $font-title;
   font-size: clamp(36px, 13vw, 62px);
-  line-height: 1;
+  line-height: 1.02;
   letter-spacing: 0;
 }
 
 h2 {
   margin: 0;
   font-size: clamp(26px, 8vw, 42px);
-  line-height: 1.15;
+  line-height: 1.16;
   letter-spacing: 0;
 }
 
@@ -175,7 +183,7 @@ h2 {
 .product-card p,
 .why-grid p {
   color: $color-text-muted;
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 .primary-action,
@@ -183,11 +191,20 @@ h2 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 18px;
-  border: 1px solid $color-accent;
-  color: $color-text;
-  background: $color-accent;
+  width: fit-content;
+  padding: 0 20px;
+  border: 1px solid #48b98b;
+  color: #0f2f28;
+  background: linear-gradient(180deg, #8ee5bc, $color-accent);
+  box-shadow: 0 10px 24px rgba(102, 207, 160, 0.24);
   font-weight: 800;
+}
+
+.text-link {
+  background: #ffffff;
+  color: $color-accent-deep;
+  border-color: $color-line;
+  box-shadow: none;
 }
 
 .hero-media,
@@ -195,18 +212,52 @@ h2 {
 .product-card,
 .why-grid article,
 .partner-grid span {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: $mobile-panel;
+  border: 1px solid $color-line;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
 }
 
 .hero-media {
+  position: relative;
   overflow: hidden;
+  min-height: 280px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(226, 242, 246, 0.9)),
+    repeating-linear-gradient(90deg, rgba(47, 155, 179, 0.12) 0 1px, transparent 1px 20px);
 }
 
-.hero-media img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+.hero-media picture {
+  display: none;
+}
+
+.heat-sink-visual {
+  position: absolute;
+  inset: 20px;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: clamp(8px, 2vw, 18px);
+  padding: 18px;
+}
+
+.heat-sink-visual::before {
+  position: absolute;
+  right: 10%;
+  bottom: 10%;
+  width: 42%;
+  height: 16%;
+  content: "";
+  border: 1px solid rgba(47, 155, 179, 0.28);
+  background: linear-gradient(180deg, #e7f3f6, #cddfe4);
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+.heat-sink-visual span {
+  width: clamp(10px, 2vw, 22px);
+  height: clamp(130px, 32vw, 230px);
+  border: 1px solid rgba(47, 155, 179, 0.24);
+  background: linear-gradient(90deg, #c9dde2, #ffffff 44%, #b8d4da);
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.86), 8px 18px 24px rgba(47, 91, 109, 0.08);
 }
 
 .metric-card,
@@ -218,7 +269,7 @@ h2 {
   display: block;
   font-family: $font-data;
   font-size: 28px;
-  color: $color-accent;
+  color: $color-accent-deep;
 }
 
 .metric-card span,
@@ -277,7 +328,7 @@ dd {
   display: grid;
   place-items: center;
   padding: 12px;
-  color: $color-text-muted;
+  color: $color-accent-deep;
   font-family: $font-data;
   text-align: center;
 }
@@ -298,7 +349,6 @@ dd {
   .hero {
     min-height: calc(100vh - 76px);
     padding: 96px 0 72px;
-    background: linear-gradient(110deg, $color-bg 0%, $color-panel 68%, $color-accent-deep 100%);
   }
 
   .hero-grid {

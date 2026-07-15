@@ -35,6 +35,7 @@ async function login() {
 <template>
   <main class="login-page">
     <section class="login-panel">
+      <div class="brand-mark" aria-hidden="true"></div>
       <p class="eyebrow">HENGZHAN CMS</p>
       <h1>后台登录</h1>
       <el-form label-position="top" @submit.prevent="login">
@@ -55,24 +56,38 @@ async function login() {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  background: #111827;
+  background:
+    linear-gradient(90deg, rgba(47, 155, 179, 0.05) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(102, 207, 160, 0.05) 1px, transparent 1px),
+    linear-gradient(135deg, #eef7fb, #f5fff8);
+  background-size: 34px 34px, 34px 34px, auto;
 }
 
 .login-panel {
-  width: min( calc(100% - 32px), 420px);
-  padding: 32px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  width: min(calc(100% - 32px), 430px);
+  padding: 34px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid #c8e2e7;
+  box-shadow: 0 24px 60px rgba(47, 91, 109, 0.12);
+}
+
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(47, 155, 179, 0.34);
+  background: repeating-linear-gradient(90deg, #d7e7eb 0 4px, #ffffff 4px 8px);
 }
 
 .eyebrow {
   margin: 0 0 8px;
-  color: #e94560;
-  font-weight: 800;
+  color: #2f9bb3;
+  font-weight: 900;
 }
 
 h1 {
   margin: 0 0 24px;
+  color: #173142;
 }
 
 .login-button {

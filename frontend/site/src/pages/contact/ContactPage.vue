@@ -30,10 +30,16 @@
 @use "../../styles/tokens" as *;
 
 /* MOBILE-FIRST */
-.contact-head,
+.contact-head {
+  border-bottom: 1px solid $color-line;
+  background: linear-gradient(135deg, #f7fcff, #f2fff8);
+}
+
 .map,
 .contact-form {
-  background: $mobile-panel;
+  border: 1px solid $color-line;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
 }
 
 h1 {
@@ -61,10 +67,13 @@ h1 {
   padding: 24px;
   color: $color-text-muted;
   font-family: $font-data;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(235, 249, 244, 0.92)),
+    repeating-linear-gradient(90deg, rgba(47, 155, 179, 0.1) 0 1px, transparent 1px 18px);
 }
 
 .map strong {
-  color: $color-text;
+  color: $color-accent-deep;
 }
 
 .contact-form {
@@ -76,9 +85,9 @@ h1 {
 input,
 textarea {
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid $color-line;
   color: $color-text;
-  background: rgba(255, 255, 255, 0.04);
+  background: #f8fcfd;
   padding: 0 14px;
 }
 
@@ -92,9 +101,9 @@ button,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid $color-accent;
-  color: $color-text;
-  background: $color-accent;
+  border: 1px solid #48b98b;
+  color: #0f2f28;
+  background: linear-gradient(180deg, #8ee5bc, $color-accent);
   font-weight: 800;
 }
 
