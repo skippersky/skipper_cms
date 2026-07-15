@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import ResponsiveImage from '../../components/ResponsiveImage.vue'
 import { t } from '../../i18n'
+
+const productImages = [
+  '/product-industrial-cooling.webp',
+  '/product-consumer-cooling.webp',
+  '/product-medical-cooling.webp',
+]
 </script>
 
 <template>
@@ -53,8 +59,8 @@ import { t } from '../../i18n'
           <router-link class="text-link tap-target" to="/products">{{ t.allProducts }}</router-link>
         </div>
         <div class="product-grid">
-          <article v-for="product in t.products" :key="product.name" class="product-card">
-            <ResponsiveImage fallback="/product-placeholder.webp" :alt="product.name" />
+          <article v-for="(product, index) in t.products" :key="product.name" class="product-card">
+            <ResponsiveImage :fallback="productImages[index] || '/product-placeholder.webp'" :alt="product.name" />
             <div>
               <h3>{{ product.name }}</h3>
               <p>{{ product.summary }}</p>
@@ -262,6 +268,12 @@ dt {
 
 .product-card {
   overflow: hidden;
+}
+
+.product-card :deep(img) {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
 }
 
 .product-card > div {
