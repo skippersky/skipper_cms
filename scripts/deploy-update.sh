@@ -36,6 +36,17 @@ compose_build_plain() {
   fi
 }
 
+compose_build_no_cache_plain() {
+  if docker compose version >/dev/null 2>&1; then
+    docker compose --progress=plain build --no-cache "$@"
+  elif command_exists docker-compose; then
+    docker-compose build --no-cache "$@"
+  else
+    echo "Docker Compose was not found. Please install docker compose plugin or docker-compose."
+    exit 1
+  fi
+}
+
 retry_git() {
   local attempt=1
   local max_attempts=3
@@ -78,7 +89,8 @@ if [ ! -d ".git" ]; then
   echo "Cannot perform Git diff based incremental deployment."
   echo "Run scripts/deploy-init.sh, or deploy from a Git clone to enable incremental updates."
   echo "Falling back to rebuilding app services from current files."
-  compose_build_plain server site admin
+  compose_build_no_cache_plain server
+  compose_build_plain site admin
   compose_cmd up -d
   compose_cmd ps
   exit 0
@@ -129,7 +141,19 @@ fi
 
 if [ "${#services_to_build[@]}" -gt 0 ]; then
   log "Building changed services: ${services_to_build[*]}"
-  compose_build_plain "${services_to_build[@]}"
+  declare -a normal_build_services=()
+  for service in "${services_to_build[@]}"; do
+    if [ "$service" = "server" ]; then
+      log "Building server without Docker cache"
+      compose_build_no_cache_plain server
+    else
+      normal_build_services+=("$service")
+    fi
+  done
+
+  if [ "${#normal_build_services[@]}" -gt 0 ]; then
+    compose_build_plain "${normal_build_services[@]}"
+  fi
 fi
 
 if [ "$needs_up" = true ]; then
