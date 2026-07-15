@@ -1,43 +1,37 @@
 <script setup lang="ts">
 import { SlidersHorizontal, X } from 'lucide-vue-next'
 import { ref } from 'vue'
+import { t } from '../../i18n'
 
 const drawerOpen = ref(false)
-const products = [
-  { name: '工业设备散热', products: 'LED散热器、服务器散热器、液压一体散热器', method: '按图加工', value: '面向连续运行设备的稳定散热需求，重视结构强度、导热效率与批量一致性。' },
-  { name: '消费电子散热', products: '电脑散热器、电子散热片、CPU风冷散热器、PC风扇', method: '批量加工', value: '适配整机装配、工程打样和批量采购，帮助客户平衡散热性能与装配效率。' },
-  { name: '精密医疗/美容散热', products: '美容仪散热产品、医疗设备散热产品', method: '来图定制', value: '关注结构适配、外观一致性与长期供货稳定性，适合设备类产品配套。' },
-]
 </script>
 
 <template>
   <main>
     <section class="section product-head">
       <div class="container">
-        <h1>产品中心</h1>
+        <h1>{{ t.productTitle }}</h1>
         <button class="filter-button tap-target" type="button" @click="drawerOpen = true">
-          <SlidersHorizontal :size="20" /> 筛选
+          <SlidersHorizontal :size="20" /> {{ t.filter }}
         </button>
       </div>
     </section>
     <section class="section">
       <div class="container product-layout">
         <aside class="desktop-filter">
-          <strong>分类筛选</strong>
-          <button>工业设备散热</button>
-          <button>消费电子散热</button>
-          <button>医疗/美容散热</button>
+          <strong>{{ t.productTitle }}</strong>
+          <button v-for="product in t.products" :key="product.name">{{ product.name }}</button>
         </aside>
         <div class="product-list">
-          <article v-for="product in products" :key="product.name" class="product-card">
+          <article v-for="product in t.products" :key="product.name" class="product-card">
             <h2>{{ product.name }}</h2>
             <p>{{ product.value }}</p>
             <div class="table-scroll">
               <table>
                 <tbody>
-                  <tr><th>覆盖产品</th><td>{{ product.products }}</td></tr>
-                  <tr><th>合作方式</th><td>{{ product.method }}</td></tr>
-                  <tr><th>采购价值</th><td>{{ product.value }}</td></tr>
+                  <tr><th>{{ t.productLabels.covered }}</th><td>{{ product.covered }}</td></tr>
+                  <tr><th>{{ t.productLabels.cooperation }}</th><td>{{ product.method }}</td></tr>
+                  <tr><th>{{ t.productLabels.value }}</th><td>{{ product.value }}</td></tr>
                 </tbody>
               </table>
             </div>
@@ -50,13 +44,11 @@ const products = [
         <button class="close tap-target" type="button" aria-label="关闭筛选" @click="drawerOpen = false">
           <X :size="20" />
         </button>
-        <strong>分类筛选</strong>
-        <button>工业设备散热</button>
-        <button>消费电子散热</button>
-        <button>医疗/美容散热</button>
+        <strong>{{ t.productTitle }}</strong>
+        <button v-for="product in t.products" :key="product.name">{{ product.name }}</button>
       </div>
     </Transition>
-    <a class="inquiry-fab tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">1688快速拿样</a>
+    <a class="inquiry-fab tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">{{ t.contact.sample }}</a>
   </main>
 </template>
 
@@ -105,6 +97,7 @@ h1 {
   border: 1px solid $color-line;
   background: #ffffff;
   box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
+  border-radius: 18px;
 }
 
 .product-card::before {
@@ -157,6 +150,7 @@ th {
   border-top: 1px solid $color-line;
   background: #ffffff;
   box-shadow: 0 -18px 44px rgba(47, 91, 109, 0.12);
+  border-radius: 18px 18px 0 0;
 }
 
 .close {
@@ -208,6 +202,7 @@ th {
     border: 1px solid $color-line;
     background: #ffffff;
     box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
+    border-radius: 18px;
   }
 
   .product-list {

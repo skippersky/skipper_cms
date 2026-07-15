@@ -1,56 +1,30 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
 import ResponsiveImage from '../../components/ResponsiveImage.vue'
-import { getHomePage, type HomePage } from '../../services/site-api'
-
-const page = ref<HomePage | null>(null)
-
-onMounted(async () => {
-  try {
-    page.value = await getHomePage()
-  } catch {
-    page.value = {
-      hero: {
-        title: '20余年深耕散热器行业的源头工厂',
-        subtitle: '深圳市恒展五金科技有限公司，2012年成立，专注铝型材散热器及各类电子散热产品生产加工，是阿里巴巴诚信14年金牌商家。',
-        banners: [],
-      },
-      metrics: [
-        { label: '行业深耕', value: '20余年' },
-        { label: '成立时间', value: '2012年' },
-        { label: '诚信通商家', value: '14年' },
-        { label: '生产加工', value: '十余年' },
-      ],
-      products: [],
-      news: [],
-      partners: ['铝型材散热器', '电脑散热器', '电子散热片', 'CPU风冷散热器'],
-    }
-  }
-})
+import { t } from '../../i18n'
 </script>
 
 <template>
-  <main v-if="page">
+  <main>
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow">HENGZHAN HEATSINK FACTORY</p>
-          <h1>{{ page.hero.title }}</h1>
-          <p class="lead">{{ page.hero.subtitle }}</p>
-          <a class="primary-action tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">1688在线验厂</a>
+          <p class="eyebrow">{{ t.hero.eyebrow }}</p>
+          <h1>{{ t.hero.title }}</h1>
+          <p class="lead">{{ t.hero.subtitle }}</p>
+          <a class="primary-action tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">{{ t.cta1688 }}</a>
         </div>
         <div class="hero-media">
           <div class="heat-sink-visual" aria-hidden="true">
             <span v-for="index in 11" :key="index"></span>
           </div>
-          <ResponsiveImage :media="page.hero.banners[0]" fallback="/factory-placeholder.webp" alt="恒展五金散热器生产加工现场" />
+          <ResponsiveImage fallback="/factory-placeholder.webp" alt="HengZhan heat sink manufacturing" />
         </div>
       </div>
     </section>
 
     <section class="section metrics">
       <div class="container metric-grid">
-        <div v-for="item in page.metrics" :key="item.label" class="metric-card">
+        <div v-for="item in t.metrics" :key="item.label" class="metric-card">
           <strong>{{ item.value }}</strong>
           <span>{{ item.label }}</span>
         </div>
@@ -60,14 +34,14 @@ onMounted(async () => {
     <section class="section about">
       <div class="container about-grid">
         <div>
-          <p class="eyebrow">ABOUT HENGZHAN</p>
-          <h2>把老客户愿意复购的稳定性，做进每一批散热产品</h2>
+          <p class="eyebrow">{{ t.about.eyebrow }}</p>
+          <h2>{{ t.about.title }}</h2>
         </div>
         <div class="about-copy">
-          <p>深圳市恒展五金科技有限公司成立于<strong>2012年</strong>，长期专注铝型材散热器、电子散热片及各类设备散热产品的生产加工。公司深耕散热器行业<strong>20余年</strong>，以源头工厂身份服务B端采购、工程开发与供应链配套需求。</p>
-          <p>对于采购商和工程师而言，散热产品不只看样品，更看批量交付时的尺寸一致性、加工稳定性与沟通效率。恒展五金依托<strong>十余年生产加工经验</strong>，围绕来图加工、结构适配、批量生产与持续供货积累了大量老客户口碑。</p>
-          <p>同时，公司是阿里巴巴诚信<strong>14年</strong>金牌商家，采购方可通过1688店铺进一步核验工厂信息、沟通需求并快速拿样。</p>
-          <a class="text-link tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">查看14年金牌工厂实拍</a>
+          <p>{{ t.about.p1 }}</p>
+          <p>{{ t.about.p2 }}</p>
+          <p>{{ t.about.p3 }}</p>
+          <a class="text-link tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">{{ t.viewFactory }}</a>
         </div>
       </div>
     </section>
@@ -75,18 +49,18 @@ onMounted(async () => {
     <section class="section products">
       <div class="container">
         <div class="section-head">
-          <h2>产品中心</h2>
-          <router-link class="text-link tap-target" to="/products">全部产品</router-link>
+          <h2>{{ t.productTitle }}</h2>
+          <router-link class="text-link tap-target" to="/products">{{ t.allProducts }}</router-link>
         </div>
         <div class="product-grid">
-          <article v-for="product in page.products" :key="product.id" class="product-card">
-            <ResponsiveImage :media="product.cover" fallback="/product-placeholder.webp" :alt="product.name" />
+          <article v-for="product in t.products" :key="product.name" class="product-card">
+            <ResponsiveImage fallback="/product-placeholder.webp" :alt="product.name" />
             <div>
               <h3>{{ product.name }}</h3>
               <p>{{ product.summary }}</p>
               <dl>
-                <div><dt>材质</dt><dd>{{ product.material }}</dd></div>
-                <div><dt>加工方式</dt><dd>{{ product.tolerance }}</dd></div>
+                <div><dt>{{ t.productLabels.material }}</dt><dd>{{ product.material }}</dd></div>
+                <div><dt>{{ t.productLabels.method }}</dt><dd>{{ product.method }}</dd></div>
               </dl>
             </div>
           </article>
@@ -97,24 +71,12 @@ onMounted(async () => {
     <section class="section why">
       <div class="container">
         <div class="section-head">
-          <h2>为什么选择我们</h2>
+          <h2>{{ t.whyTitle }}</h2>
         </div>
         <div class="why-grid">
-          <article>
-            <strong>源头工厂，沟通更直接</strong>
-            <p>围绕铝型材散热器及电子散热产品生产加工，减少中间沟通损耗，更适合工程打样与批量采购衔接。</p>
-          </article>
-          <article>
-            <strong>14年诚信通记录可核验</strong>
-            <p>通过1688店铺沉淀长期经营记录，让采购方在下单前多一层可验证的信任依据。</p>
-          </article>
-          <article>
-            <strong>实体地址清晰可追溯</strong>
-            <p>工厂地址位于中国广东省东莞市黄江镇合路村创业三路11号芙光科技园B座1楼。</p>
-          </article>
-          <article>
-            <strong>老客户口碑验证</strong>
-            <p>长期服务复购客户，靠稳定加工、务实沟通和持续供货建立合作基础。</p>
+          <article v-for="item in t.why" :key="item.title">
+            <strong>{{ item.title }}</strong>
+            <p>{{ item.text }}</p>
           </article>
         </div>
       </div>
@@ -122,7 +84,7 @@ onMounted(async () => {
 
     <section class="section partners">
       <div class="container partner-grid">
-        <span v-for="partner in page.partners" :key="partner">{{ partner }}</span>
+        <span v-for="partner in t.partners" :key="partner">{{ partner }}</span>
       </div>
     </section>
   </main>
@@ -215,12 +177,14 @@ h2 {
   border: 1px solid $color-line;
   background: rgba(255, 255, 255, 0.86);
   box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
+  backdrop-filter: blur(14px);
 }
 
 .hero-media {
   position: relative;
   overflow: hidden;
   min-height: 280px;
+  border-radius: 24px;
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(226, 242, 246, 0.9)),
     repeating-linear-gradient(90deg, rgba(47, 155, 179, 0.12) 0 1px, transparent 1px 20px);
@@ -263,6 +227,12 @@ h2 {
 .metric-card,
 .why-grid article {
   padding: 18px;
+}
+
+.metric-card {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(242, 255, 248, 0.86)),
+    #ffffff;
 }
 
 .metric-card strong {

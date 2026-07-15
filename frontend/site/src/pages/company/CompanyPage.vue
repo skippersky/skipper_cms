@@ -1,21 +1,25 @@
+<script setup lang="ts">
+import { t } from '../../i18n'
+</script>
+
 <template>
   <main>
     <section class="section company-hero">
       <div class="container">
         <p class="eyebrow">ABOUT HENGZHAN</p>
-        <h1>深圳市恒展五金科技有限公司</h1>
-        <p class="lead">成立于<strong>2012年</strong>，深耕散热器行业<strong>20余年</strong>，是阿里巴巴诚信<strong>14年</strong>金牌商家。</p>
+        <h1>{{ t.company.title }}</h1>
+        <p class="lead">{{ t.company.lead }}</p>
       </div>
     </section>
     <section class="section">
       <div class="container story">
-        <p>恒展五金长期专注铝型材散热器、电子散热片及各类设备散热产品生产加工。对B端采购商、工程师和供应链负责人来说，散热件不是一次性买卖，而是需要稳定打样、稳定量产、稳定沟通的长期配套。</p>
-        <p>公司凭借十余年生产加工经验，在来图加工、结构适配、批量交付与持续供货中积累了老客户口碑。我们不做空泛承诺，而是把客户关心的工厂真实性、交付稳定性和产品适配沟通放在合作前面。</p>
+        <p>{{ t.company.story1 }}</p>
+        <p>{{ t.company.story2 }}</p>
       </div>
     </section>
     <section class="section">
       <div class="container timeline">
-        <article v-for="item in ['2012年 公司成立', '十余年 铝型材散热器生产加工经验', '14年 阿里巴巴诚信金牌商家', '老客户口碑 长期复购验证稳定性']" :key="item">
+        <article v-for="item in t.company.timeline" :key="item">
           {{ item }}
         </article>
       </div>
@@ -63,6 +67,7 @@ h1 {
   border: 1px solid $color-line;
   background: rgba(255, 255, 255, 0.88);
   box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
+  border-radius: 18px;
 }
 
 .timeline {
@@ -77,6 +82,7 @@ h1 {
   border-top: 1px solid $color-line;
   background: #ffffff;
   box-shadow: 0 14px 34px rgba(47, 91, 109, 0.08);
+  border-radius: 18px;
 }
 
 @media (min-width: $breakpoint-lg) {

@@ -68,6 +68,41 @@ img {
   padding: 48px 0;
 }
 
+.metric-card,
+.product-card,
+.why-grid article,
+.partner-grid span,
+.story,
+.timeline article,
+.map,
+.contact-form,
+.desktop-filter,
+.hero-media {
+  border-radius: 18px;
+  transition: transform $motion-mechanical-normal $motion-easing-linear,
+    box-shadow $motion-mechanical-normal $motion-easing-linear,
+    border-color $motion-mechanical-normal $motion-easing-linear,
+    background $motion-mechanical-normal $motion-easing-linear;
+}
+
+.metric-card:hover,
+.product-card:hover,
+.why-grid article:hover,
+.partner-grid span:hover,
+.timeline article:hover {
+  transform: translateY(-5px);
+  border-color: rgba(102, 207, 160, 0.72);
+  box-shadow: 0 24px 70px rgba(47, 91, 109, 0.16), 0 8px 24px rgba(102, 207, 160, 0.12);
+}
+
+.metric-card:active,
+.product-card:active,
+.why-grid article:active,
+.partner-grid span:active,
+.timeline article:active {
+  transform: translateY(-2px) scale(0.995);
+}
+
 @media (min-width: $breakpoint-lg) {
   body {
     background:

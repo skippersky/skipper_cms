@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Menu, X } from 'lucide-vue-next'
 import { onBeforeUnmount, ref, watch } from 'vue'
+import { currentLocale, languages, setLocale, t, type Locale } from './i18n'
 
 const open = ref(false)
 
@@ -17,25 +18,49 @@ onBeforeUnmount(() => {
   <header class="site-header">
     <router-link class="brand tap-target" to="/" @click="open = false">
       <img class="brand-logo" src="/hengzhan-logo.svg" alt="恒展五金科技 Logo" />
-      <span>恒展五金科技</span>
+      <span>{{ t.brand }}</span>
     </router-link>
     <button class="nav-toggle" type="button" aria-label="打开导航" @click="open = !open">
       <X v-if="open" :size="22" />
       <Menu v-else :size="22" />
     </button>
     <nav class="desktop-nav">
-      <router-link to="/">首页</router-link>
-      <router-link to="/company">关于我们</router-link>
-      <router-link to="/products">产品中心</router-link>
-      <router-link to="/contact">联系我们</router-link>
+      <router-link to="/">{{ t.nav.home }}</router-link>
+      <router-link to="/company">{{ t.nav.company }}</router-link>
+      <router-link to="/products">{{ t.nav.products }}</router-link>
+      <router-link to="/contact">{{ t.nav.contact }}</router-link>
     </nav>
+    <div class="language-switcher">
+      <button
+        v-for="language in languages"
+        :key="language.value"
+        class="lang-button"
+        :class="{ active: currentLocale === language.value }"
+        type="button"
+        @click="setLocale(language.value as Locale)"
+      >
+        {{ language.label }}
+      </button>
+    </div>
   </header>
   <Transition name="drawer">
     <nav v-if="open" class="mobile-nav" @click="open = false">
-      <router-link to="/">首页</router-link>
-      <router-link to="/company">关于我们</router-link>
-      <router-link to="/products">产品中心</router-link>
-      <router-link to="/contact">联系我们</router-link>
+      <router-link to="/">{{ t.nav.home }}</router-link>
+      <router-link to="/company">{{ t.nav.company }}</router-link>
+      <router-link to="/products">{{ t.nav.products }}</router-link>
+      <router-link to="/contact">{{ t.nav.contact }}</router-link>
+      <div class="mobile-lang">
+        <button
+          v-for="language in languages"
+          :key="language.value"
+          class="lang-button"
+          :class="{ active: currentLocale === language.value }"
+          type="button"
+          @click.stop="setLocale(language.value as Locale)"
+        >
+          {{ language.label }}
+        </button>
+      </div>
     </nav>
   </Transition>
   <router-view />
@@ -87,6 +112,10 @@ onBeforeUnmount(() => {
   display: none;
 }
 
+.language-switcher {
+  display: none;
+}
+
 .mobile-nav {
   position: fixed;
   inset: 64px 0 0;
@@ -106,6 +135,36 @@ onBeforeUnmount(() => {
   color: $color-text;
   font-size: 20px;
   font-weight: 800;
+}
+
+.mobile-lang {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 16px;
+}
+
+.lang-button {
+  min-width: 44px;
+  min-height: 36px;
+  border: 1px solid $color-line;
+  border-radius: 999px;
+  color: $color-text-muted;
+  background: rgba(255, 255, 255, 0.78);
+  font-weight: 800;
+  transition: color $motion-mechanical-fast $motion-easing-linear,
+    background $motion-mechanical-fast $motion-easing-linear,
+    box-shadow $motion-mechanical-fast $motion-easing-linear,
+    transform $motion-mechanical-fast $motion-easing-linear;
+}
+
+.lang-button:hover,
+.lang-button:focus,
+.lang-button.active {
+  color: #0f2f28;
+  background: linear-gradient(180deg, #8ee5bc, $color-accent);
+  box-shadow: 0 8px 20px rgba(102, 207, 160, 0.2);
+  transform: translateY(-1px);
 }
 
 .drawer-enter-active,
@@ -129,16 +188,50 @@ onBeforeUnmount(() => {
   }
 
   .desktop-nav {
+    position: relative;
     display: flex;
     gap: 28px;
     font-weight: 800;
     color: $color-text-muted;
   }
 
+  .desktop-nav a {
+    position: relative;
+    padding: 8px 0;
+    transition: color $motion-mechanical-fast $motion-easing-linear,
+      transform $motion-mechanical-fast $motion-easing-linear;
+  }
+
+  .desktop-nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    content: "";
+    border-radius: 999px;
+    background: linear-gradient(90deg, $color-accent-deep, $color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform $motion-mechanical-normal $motion-easing-linear;
+  }
+
   .desktop-nav a:hover,
   .desktop-nav a:focus,
   .desktop-nav a.router-link-active {
     color: $color-accent-deep;
+    transform: translateY(-1px);
+  }
+
+  .desktop-nav a:hover::after,
+  .desktop-nav a:focus::after,
+  .desktop-nav a.router-link-active::after {
+    transform: scaleX(1);
+  }
+
+  .language-switcher {
+    display: flex;
+    gap: 6px;
   }
 }
 </style>

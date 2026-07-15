@@ -1,25 +1,29 @@
+<script setup lang="ts">
+import { t } from '../../i18n'
+</script>
+
 <template>
   <main>
     <section class="section contact-head">
       <div class="container">
-        <h1>联系我们</h1>
-        <p class="lead">工厂地址：中国广东省东莞市黄江镇合路村创业三路11号芙光科技园B座1楼</p>
+        <h1>{{ t.contact.title }}</h1>
+        <p class="lead">{{ t.contact.lead }}</p>
       </div>
     </section>
     <section class="section">
       <div class="container contact-grid">
         <div class="map">
-          <strong>实体工厂地址</strong>
-          <span>中国广东省东莞市黄江镇合路村创业三路11号芙光科技园B座1楼</span>
+          <strong>{{ t.contact.addressTitle }}</strong>
+          <span>{{ t.contact.address }}</span>
         </div>
         <form class="contact-form">
-          <input type="text" placeholder="公司名称" />
-          <input type="text" placeholder="联系人" />
-          <input type="tel" placeholder="联系电话" />
-          <input type="email" placeholder="邮箱" />
-          <textarea placeholder="请描述散热产品类型、图纸、数量或交付需求"></textarea>
-          <button class="tap-target" type="button">提交留言</button>
-          <a class="tel tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">1688在线验厂 / 快速拿样</a>
+          <input type="text" :placeholder="t.contact.company" />
+          <input type="text" :placeholder="t.contact.name" />
+          <input type="tel" :placeholder="t.contact.phone" />
+          <input type="email" :placeholder="t.contact.email" />
+          <textarea :placeholder="t.contact.message"></textarea>
+          <button class="tap-target" type="button">{{ t.contact.submit }}</button>
+          <a class="tel tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">{{ t.contact.sample }}</a>
         </form>
       </div>
     </section>
@@ -40,6 +44,7 @@
   border: 1px solid $color-line;
   background: #ffffff;
   box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
+  border-radius: 18px;
 }
 
 h1 {
