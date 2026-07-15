@@ -35,7 +35,7 @@ async function login() {
 <template>
   <main class="login-page">
     <section class="login-panel">
-      <div class="brand-mark" aria-hidden="true"></div>
+      <img class="brand-logo" src="/hengzhan-logo.svg" alt="恒展五金 Logo" />
       <p class="eyebrow">HENGZHAN CMS</p>
       <h1>后台登录</h1>
       <el-form label-position="top" @submit.prevent="login">
@@ -71,12 +71,11 @@ async function login() {
   box-shadow: 0 24px 60px rgba(47, 91, 109, 0.12);
 }
 
-.brand-mark {
+.brand-logo {
   width: 44px;
   height: 44px;
   margin-bottom: 18px;
-  border: 1px solid rgba(47, 155, 179, 0.34);
-  background: repeating-linear-gradient(90deg, #d7e7eb 0 4px, #ffffff 4px 8px);
+  object-fit: contain;
 }
 
 .eyebrow {

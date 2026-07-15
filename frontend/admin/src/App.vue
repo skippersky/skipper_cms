@@ -18,7 +18,10 @@ function logout() {
   <router-view v-if="isLogin" />
   <el-container v-else class="admin-shell">
     <el-aside width="236px">
-      <div class="brand">恒展五金 CMS</div>
+      <div class="brand">
+        <img src="/hengzhan-logo.svg" alt="恒展五金 Logo" />
+        <span>恒展五金 CMS</span>
+      </div>
       <el-menu router default-active="/">
         <el-menu-item index="/">仪表盘</el-menu-item>
         <el-menu-item index="/products">产品管理</el-menu-item>
@@ -47,9 +50,15 @@ function logout() {
   height: 64px;
   display: flex;
   align-items: center;
+  gap: 10px;
   padding: 0 20px;
   color: #173142;
   font-weight: 900;
+}
+
+.brand img {
+  width: 32px;
+  height: 32px;
 }
 
 .el-aside {

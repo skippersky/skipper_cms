@@ -16,7 +16,7 @@ onBeforeUnmount(() => {
 <template>
   <header class="site-header">
     <router-link class="brand tap-target" to="/" @click="open = false">
-      <span class="brand-mark"></span>
+      <img class="brand-logo" src="/hengzhan-logo.svg" alt="恒展五金科技 Logo" />
       <span>恒展五金科技</span>
     </router-link>
     <button class="nav-toggle" type="button" aria-label="打开导航" @click="open = !open">
@@ -69,14 +69,10 @@ onBeforeUnmount(() => {
   font-weight: 900;
 }
 
-.brand-mark {
-  width: 30px;
-  height: 30px;
-  border: 1px solid rgba(47, 155, 179, 0.34);
-  background:
-    repeating-linear-gradient(90deg, #d7e7eb 0 3px, #ffffff 3px 6px),
-    linear-gradient(135deg, $color-accent-deep, $color-accent);
-  box-shadow: inset 0 0 0 4px rgba(102, 207, 160, 0.18);
+.brand-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
 }
 
 .nav-toggle {

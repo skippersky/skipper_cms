@@ -1,0 +1,16 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">HengZhan Hardware logo</title>
+  <desc id="desc">Minimal industrial H mark with heat sink fin lines and copper accent.</desc>
+  <rect width="256" height="256" fill="#ffffff"/>
+  <path d="M58 54H89L89 113H167V54H198V202H167V143H89V202H58V54Z" fill="#AEB8BE"/>
+  <path d="M78 74H99L99 120H157V74H178V182H157V136H99V182H78V74Z" fill="#F7F9FA"/>
+  <path d="M54 202H86L70 218H38L54 202Z" fill="#7F8D94"/>
+  <path d="M170 38H202L186 54H154L170 38Z" fill="#7F8D94"/>
+  <rect x="110" y="84" width="7" height="88" fill="#9EAAB0"/>
+  <rect x="124" y="84" width="7" height="88" fill="#9EAAB0"/>
+  <rect x="138" y="84" width="7" height="88" fill="#9EAAB0"/>
+  <rect x="152" y="84" width="7" height="88" fill="#9EAAB0"/>
+  <rect x="166" y="84" width="7" height="88" fill="#9EAAB0"/>
+  <rect x="56" y="124" width="144" height="8" fill="#C4773D"/>
+  <path d="M58 54H89L89 113H167V54H198V202H167V143H89V202H58V54Z" stroke="#5F6D74" stroke-width="4" stroke-linejoin="miter"/>
+</svg>
