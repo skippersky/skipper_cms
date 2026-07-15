@@ -20,9 +20,6 @@ const productImages = [
           <a class="primary-action tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">{{ t.cta1688 }}</a>
         </div>
         <div class="hero-media">
-          <div class="heat-sink-visual" aria-hidden="true">
-            <span v-for="index in 11" :key="index"></span>
-          </div>
           <ResponsiveImage fallback="/factory-placeholder.webp" alt="HengZhan heat sink manufacturing" />
         </div>
       </div>
@@ -196,38 +193,11 @@ h2 {
     repeating-linear-gradient(90deg, rgba(47, 155, 179, 0.12) 0 1px, transparent 1px 20px);
 }
 
-.hero-media picture {
-  display: none;
-}
-
-.heat-sink-visual {
-  position: absolute;
-  inset: 20px;
-  display: flex;
-  align-items: end;
-  justify-content: center;
-  gap: clamp(8px, 2vw, 18px);
-  padding: 18px;
-}
-
-.heat-sink-visual::before {
-  position: absolute;
-  right: 10%;
-  bottom: 10%;
-  width: 42%;
-  height: 16%;
-  content: "";
-  border: 1px solid rgba(47, 155, 179, 0.28);
-  background: linear-gradient(180deg, #e7f3f6, #cddfe4);
-  box-shadow: inset 0 1px 0 #fff;
-}
-
-.heat-sink-visual span {
-  width: clamp(10px, 2vw, 22px);
-  height: clamp(130px, 32vw, 230px);
-  border: 1px solid rgba(47, 155, 179, 0.24);
-  background: linear-gradient(90deg, #c9dde2, #ffffff 44%, #b8d4da);
-  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.86), 8px 18px 24px rgba(47, 91, 109, 0.08);
+.hero-media :deep(img) {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  object-fit: cover;
 }
 
 .metric-card,
