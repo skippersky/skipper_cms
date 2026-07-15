@@ -13,8 +13,10 @@ import { t } from '../../i18n'
     <section class="section">
       <div class="container contact-grid">
         <div class="map">
-          <strong>{{ t.contact.addressTitle }}</strong>
-          <span>{{ t.contact.address }}</span>
+          <div class="map-address">
+            <strong>{{ t.contact.addressTitle }}</strong>
+            <span>{{ t.contact.address }}</span>
+          </div>
         </div>
         <form class="contact-form">
           <input type="text" :placeholder="t.contact.company" />
@@ -65,19 +67,32 @@ h1 {
 }
 
 .map {
+  position: relative;
+  overflow: hidden;
   min-height: 260px;
   display: grid;
-  align-content: center;
-  gap: 12px;
+  align-items: end;
   padding: 24px;
   color: $color-text-muted;
   font-family: $font-data;
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(235, 249, 244, 0.92)),
-    repeating-linear-gradient(90deg, rgba(47, 155, 179, 0.1) 0 1px, transparent 1px 18px);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(15, 52, 96, 0.18)),
+    url("/contact-map.webp") center / cover no-repeat;
 }
 
-.map strong {
+.map-address {
+  display: grid;
+  gap: 8px;
+  max-width: 680px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 16px 40px rgba(47, 91, 109, 0.16);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+}
+
+.map-address strong {
   color: $color-accent-deep;
 }
 
