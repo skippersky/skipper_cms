@@ -27,19 +27,22 @@ public class AdminAuthService {
     public LoginResponse login(LoginRequest request) {
         if (request.username() == null || request.username().isBlank()
                 || request.password() == null || request.password().isBlank()) {
-            throw new BizException(401, "用户名或密码错误");
+            throw new BizException(401, "Invalid username or password");
         }
+
         AdminUser user = adminUserMapper.selectOne(new LambdaQueryWrapper<AdminUser>()
                 .eq(AdminUser::getUsername, request.username())
                 .last("LIMIT 1"));
         if (user == null || user.getEnabled() == null || user.getEnabled() != 1) {
-            throw new BizException(401, "用户名或密码错误");
+            throw new BizException(401, "Invalid username or password");
         }
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
-            throw new BizException(401, "用户名或密码错误");
+            throw new BizException(401, "Invalid username or password");
         }
+
         List<String> permissions = List.of("cms:all");
         String token = jwtService.createToken(user.getUsername(), permissions);
         return new LoginResponse(token, user.getUsername(), permissions);
     }
 }
+

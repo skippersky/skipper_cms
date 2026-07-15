@@ -26,15 +26,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
         if (authorization != null && authorization.startsWith("Bearer ")) {
-            String username = jwtService.parseSubject(authorization.substring(7));
-            var auth = new UsernamePasswordAuthenticationToken(
-                    username,
-                    null,
-                    List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
-            );
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            try {
+                String username = jwtService.parseSubject(authorization.substring(7));
+                var auth = new UsernamePasswordAuthenticationToken(
+                        username,
+                        null,
+                        List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+                );
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            } catch (RuntimeException ex) {
+                SecurityContextHolder.clearContext();
+            }
         }
         filterChain.doFilter(request, response);
     }
 }
-
