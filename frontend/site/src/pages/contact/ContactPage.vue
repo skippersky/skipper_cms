@@ -1,5 +1,56 @@
 <script setup lang="ts">
+import { reactive, ref } from 'vue'
 import { t } from '../../i18n'
+import { createInquiry } from '../../services/site-api'
+
+const form = reactive({
+  companyName: '',
+  contactName: '',
+  phone: '',
+  email: '',
+  message: '',
+})
+
+const submitting = ref(false)
+const feedback = ref('')
+const feedbackType = ref<'success' | 'error'>('success')
+
+async function submitInquiry() {
+  feedback.value = ''
+  if (!form.contactName.trim()) {
+    feedbackType.value = 'error'
+    feedback.value = '请填写联系人'
+    return
+  }
+  if (!form.phone.trim() && !form.email.trim()) {
+    feedbackType.value = 'error'
+    feedback.value = '请至少填写电话或邮箱'
+    return
+  }
+
+  submitting.value = true
+  try {
+    await createInquiry({
+      companyName: form.companyName.trim(),
+      contactName: form.contactName.trim(),
+      phone: form.phone.trim(),
+      email: form.email.trim(),
+      message: form.message.trim(),
+    })
+    form.companyName = ''
+    form.contactName = ''
+    form.phone = ''
+    form.email = ''
+    form.message = ''
+    feedbackType.value = 'success'
+    feedback.value = '留言已提交，我们会尽快与您联系'
+  } catch (error) {
+    feedbackType.value = 'error'
+    feedback.value = error instanceof Error ? error.message : '提交失败，请稍后再试'
+  } finally {
+    submitting.value = false
+  }
+}
 </script>
 
 <template>
@@ -18,13 +69,16 @@ import { t } from '../../i18n'
             <span>{{ t.contact.address }}</span>
           </div>
         </div>
-        <form class="contact-form">
-          <input type="text" :placeholder="t.contact.company" />
-          <input type="text" :placeholder="t.contact.name" />
-          <input type="tel" :placeholder="t.contact.phone" />
-          <input type="email" :placeholder="t.contact.email" />
-          <textarea :placeholder="t.contact.message"></textarea>
-          <button class="tap-target" type="button">{{ t.contact.submit }}</button>
+        <form class="contact-form" @submit.prevent="submitInquiry">
+          <input v-model="form.companyName" type="text" :placeholder="t.contact.company" autocomplete="organization" />
+          <input v-model="form.contactName" type="text" :placeholder="t.contact.name" autocomplete="name" required />
+          <input v-model="form.phone" type="tel" :placeholder="t.contact.phone" autocomplete="tel" />
+          <input v-model="form.email" type="email" :placeholder="t.contact.email" autocomplete="email" />
+          <textarea v-model="form.message" :placeholder="t.contact.message"></textarea>
+          <p v-if="feedback" class="form-feedback" :class="feedbackType">{{ feedback }}</p>
+          <button class="tap-target" type="submit" :disabled="submitting">
+            {{ submitting ? '提交中...' : t.contact.submit }}
+          </button>
           <a class="tel tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">{{ t.contact.sample }}</a>
         </form>
       </div>
@@ -125,6 +179,29 @@ button,
   color: #0f2f28;
   background: linear-gradient(180deg, #8ee5bc, $color-accent);
   font-weight: 800;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
+.form-feedback {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.form-feedback.success {
+  color: #14533c;
+  background: rgba(102, 207, 160, 0.18);
+}
+
+.form-feedback.error {
+  color: #8f2638;
+  background: rgba(233, 69, 96, 0.12);
 }
 
 @media (min-width: $breakpoint-lg) {

@@ -40,9 +40,29 @@ export interface HomePage {
   partners: string[]
 }
 
+export interface InquiryPayload {
+  companyName: string
+  contactName: string
+  phone: string
+  email: string
+  message: string
+}
+
 export async function getHomePage(): Promise<HomePage> {
   const response = await fetch('/api/site/home')
   const payload = (await response.json()) as ApiResponse<HomePage>
   return payload.data
 }
 
+export async function createInquiry(data: InquiryPayload): Promise<number> {
+  const response = await fetch('/api/site/inquiries', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  const payload = (await response.json()) as ApiResponse<number>
+  if (!response.ok || payload.code !== 0) {
+    throw new Error(payload.message || '提交失败，请稍后再试')
+  }
+  return payload.data
+}
