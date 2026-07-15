@@ -4,6 +4,7 @@ import { onBeforeUnmount, ref, watch } from 'vue'
 import { currentLocale, languages, setLocale, t, type Locale } from './i18n'
 
 const open = ref(false)
+const currentYear = new Date().getFullYear()
 
 watch(open, (value) => {
   document.body.classList.toggle('nav-locked', value)
@@ -64,6 +65,9 @@ onBeforeUnmount(() => {
     </nav>
   </Transition>
   <router-view />
+  <footer class="site-footer">
+    <span>Copyright © 2012-{{ currentYear }} 深圳市恒展五金科技有限公司. All Rights Reserved.</span>
+  </footer>
 </template>
 
 <style scoped lang="scss">
@@ -177,6 +181,20 @@ onBeforeUnmount(() => {
   transform: translateX(100%);
 }
 
+.site-footer {
+  display: grid;
+  place-items: center;
+  min-height: 76px;
+  padding: 20px 16px;
+  border-top: 1px solid $color-line;
+  color: $color-text-muted;
+  background: rgba(255, 255, 255, 0.86);
+  font-family: $font-data;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
 @media (min-width: $breakpoint-lg) {
   .site-header {
     min-height: 76px;
@@ -232,6 +250,11 @@ onBeforeUnmount(() => {
   .language-switcher {
     display: flex;
     gap: 6px;
+  }
+
+  .site-footer {
+    min-height: 88px;
+    padding-inline: 48px;
   }
 }
 </style>
