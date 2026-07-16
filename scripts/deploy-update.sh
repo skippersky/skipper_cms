@@ -87,19 +87,23 @@ cd "$APP_DIR"
 if [ ! -d ".git" ]; then
   log "Current app directory is not a Git repository"
   echo "Cannot perform Git diff based incremental deployment."
-  echo "Run scripts/deploy-init.sh, or deploy from a Git clone to enable incremental updates."
-  echo "Falling back to rebuilding app services from current files."
-  compose_build_no_cache_plain server
-  compose_build_plain site admin
-  compose_cmd up -d
-  compose_cmd ps
-  exit 0
+  echo "This script will not rebuild from stale local files because new code cannot be pulled."
+  echo "Please replace ${APP_DIR} with a Git clone, or download the latest archive before deploying."
+  echo ""
+  echo "Recommended Git setup:"
+  echo "  cd /opt"
+  echo "  sudo mv skipper-cms skipper-cms.bak.\$(date +%Y%m%d%H%M%S)"
+  echo "  sudo git clone --depth 1 https://github.com/skippersky/skipper_cms.git skipper-cms"
+  echo "  sudo cp skipper-cms.bak.*/.env skipper-cms/.env"
+  exit 2
 fi
 
 log "Fetching ${BRANCH}"
 BEFORE_COMMIT="$(git rev-parse HEAD)"
+echo "Current commit: ${BEFORE_COMMIT}"
 retry_git fetch origin "$BRANCH"
 AFTER_COMMIT="$(git rev-parse "origin/${BRANCH}")"
+echo "Remote commit:  ${AFTER_COMMIT}"
 
 if [ "$BEFORE_COMMIT" = "$AFTER_COMMIT" ]; then
   log "No code changes detected"
@@ -116,6 +120,7 @@ cat "$CHANGED_FILE_LIST"
 log "Updating working tree"
 git checkout -B "$BRANCH" "$AFTER_COMMIT"
 git reset --hard "$AFTER_COMMIT"
+echo "Deployed commit: $(git rev-parse HEAD)"
 
 declare -a services_to_build=()
 needs_up=false
