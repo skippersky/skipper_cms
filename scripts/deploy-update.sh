@@ -101,9 +101,23 @@ fi
 log "Fetching ${BRANCH}"
 BEFORE_COMMIT="$(git rev-parse HEAD)"
 echo "Current commit: ${BEFORE_COMMIT}"
-retry_git fetch origin "$BRANCH"
+FETCH_OK=true
+if ! retry_git fetch origin "$BRANCH"; then
+  FETCH_OK=false
+  echo "Warning: failed to fetch origin/${BRANCH} from network."
+  echo "Will try to use the locally cached origin/${BRANCH} reference."
+fi
+
+if ! git rev-parse --verify "origin/${BRANCH}" >/dev/null 2>&1; then
+  echo "No local origin/${BRANCH} reference is available. Cannot determine what to deploy."
+  exit 1
+fi
+
 AFTER_COMMIT="$(git rev-parse "origin/${BRANCH}")"
 echo "Remote commit:  ${AFTER_COMMIT}"
+if [ "$FETCH_OK" = false ]; then
+  echo "Remote commit is from the local Git cache because fetch failed."
+fi
 
 if [ "$BEFORE_COMMIT" = "$AFTER_COMMIT" ]; then
   log "No code changes detected"
