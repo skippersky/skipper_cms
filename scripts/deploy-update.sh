@@ -64,9 +64,32 @@ retry_git() {
   done
 }
 
-contains_path() {
-  local pattern="$1"
-  grep -Eq "$pattern" "$CHANGED_FILE_LIST"
+has_changed_path() {
+  local prefix="$1"
+  local file
+
+  while IFS= read -r file || [ -n "$file" ]; do
+    case "$file" in
+      "$prefix"|"$prefix"/*)
+        return 0
+        ;;
+    esac
+  done < "$CHANGED_FILE_LIST"
+
+  return 1
+}
+
+has_changed_file() {
+  local expected="$1"
+  local file
+
+  while IFS= read -r file || [ -n "$file" ]; do
+    if [ "$file" = "$expected" ]; then
+      return 0
+    fi
+  done < "$CHANGED_FILE_LIST"
+
+  return 1
 }
 
 if ! command_exists git; then
@@ -156,7 +179,7 @@ if [ "$DEPLOYED_COMMIT" != "$AFTER_COMMIT" ]; then
   exit 1
 fi
 
-if [ "${DEPLOY_REEXECED:-false}" != "true" ] && contains_path '^scripts/deploy-update\.sh$'; then
+if [ "${DEPLOY_REEXECED:-false}" != "true" ] && has_changed_file "scripts/deploy-update.sh"; then
   log "Deploy script was updated, restarting with the new script"
   export DEPLOY_BASE_COMMIT="$BEFORE_COMMIT"
   export DEPLOY_REEXECED=true
@@ -166,22 +189,22 @@ fi
 declare -a services_to_build=()
 needs_up=false
 
-if [ "$FORCE_REBUILD" = "true" ] || contains_path '^(server/|docker-compose\.yml|\.env\.example)$'; then
+if [ "$FORCE_REBUILD" = "true" ] || has_changed_path "server" || has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
   services_to_build+=("server")
   needs_up=true
 fi
 
-if [ "$FORCE_REBUILD" = "true" ] || contains_path '^(frontend/site/|docker-compose\.yml|\.env\.example)$'; then
+if [ "$FORCE_REBUILD" = "true" ] || has_changed_path "frontend/site" || has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
   services_to_build+=("site")
   needs_up=true
 fi
 
-if [ "$FORCE_REBUILD" = "true" ] || contains_path '^(frontend/admin/|docker-compose\.yml|\.env\.example)$'; then
+if [ "$FORCE_REBUILD" = "true" ] || has_changed_path "frontend/admin" || has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
   services_to_build+=("admin")
   needs_up=true
 fi
 
-if contains_path '^(docker-compose\.yml|scripts/|docs/NGINX_REVERSE_PROXY\.md)$'; then
+if has_changed_file "docker-compose.yml" || has_changed_path "scripts" || has_changed_file "docs/NGINX_REVERSE_PROXY.md"; then
   needs_up=true
 fi
 
