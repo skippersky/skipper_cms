@@ -3,7 +3,9 @@ set -Eeuo pipefail
 
 APP_DIR="${APP_DIR:-/opt/skipper-cms}"
 BRANCH="${BRANCH:-main}"
-GIT_TIMEOUT_SECONDS="${GIT_TIMEOUT_SECONDS:-45}"
+REMOTE="${REMOTE:-origin}"
+GIT_TIMEOUT_SECONDS="${GIT_TIMEOUT_SECONDS:-120}"
+FORCE_REBUILD="${FORCE_REBUILD:-false}"
 
 log() {
   echo ""
@@ -49,7 +51,7 @@ compose_build_no_cache_plain() {
 
 retry_git() {
   local attempt=1
-  local max_attempts=3
+  local max_attempts="${GIT_RETRY_TIMES:-3}"
 
   until timeout "$GIT_TIMEOUT_SECONDS" git -c http.version=HTTP/1.1 "$@"; do
     if [ "$attempt" -ge "$max_attempts" ]; then
@@ -98,58 +100,72 @@ if [ ! -d ".git" ]; then
   exit 2
 fi
 
-log "Fetching ${BRANCH}"
+log "Repository"
+echo "Path:   ${APP_DIR}"
+echo "Remote: ${REMOTE}"
+echo "Branch: ${BRANCH}"
+git remote -v
+
+log "Fetching ${REMOTE}/${BRANCH}"
 BEFORE_COMMIT="$(git rev-parse HEAD)"
 echo "Current commit: ${BEFORE_COMMIT}"
-FETCH_OK=true
-if ! retry_git fetch origin "$BRANCH"; then
-  FETCH_OK=false
-  echo "Warning: failed to fetch origin/${BRANCH} from network."
-  echo "Will try to use the locally cached origin/${BRANCH} reference."
-fi
+retry_git fetch --prune "$REMOTE" "${BRANCH}:refs/remotes/${REMOTE}/${BRANCH}"
 
-if ! git rev-parse --verify "origin/${BRANCH}" >/dev/null 2>&1; then
-  echo "No local origin/${BRANCH} reference is available. Cannot determine what to deploy."
+if ! git rev-parse --verify "${REMOTE}/${BRANCH}" >/dev/null 2>&1; then
+  echo "No ${REMOTE}/${BRANCH} reference is available. Cannot determine what to deploy."
   exit 1
 fi
 
-AFTER_COMMIT="$(git rev-parse "origin/${BRANCH}")"
+AFTER_COMMIT="$(git rev-parse "${REMOTE}/${BRANCH}")"
 echo "Remote commit:  ${AFTER_COMMIT}"
-if [ "$FETCH_OK" = false ]; then
-  echo "Remote commit is from the local Git cache because fetch failed."
-fi
 
-if [ "$BEFORE_COMMIT" = "$AFTER_COMMIT" ]; then
+if [ "$BEFORE_COMMIT" = "$AFTER_COMMIT" ] && [ "$FORCE_REBUILD" != "true" ]; then
   log "No code changes detected"
+  echo "Already deployed commit: ${BEFORE_COMMIT}"
+  echo "Tip: run FORCE_REBUILD=true $0 to rebuild containers from the current code."
   compose_cmd ps
   exit 0
 fi
 
 CHANGED_FILE_LIST="$(mktemp)"
-git diff --name-only "$BEFORE_COMMIT" "$AFTER_COMMIT" > "$CHANGED_FILE_LIST"
+if [ "$BEFORE_COMMIT" = "$AFTER_COMMIT" ]; then
+  : > "$CHANGED_FILE_LIST"
+else
+  git diff --name-only "$BEFORE_COMMIT" "$AFTER_COMMIT" > "$CHANGED_FILE_LIST"
+fi
 
-log "Changed files"
-cat "$CHANGED_FILE_LIST"
+if [ -s "$CHANGED_FILE_LIST" ]; then
+  log "Changed files"
+  cat "$CHANGED_FILE_LIST"
+else
+  log "No Git file diff, force rebuild mode is active"
+fi
 
 log "Updating working tree"
 git checkout -B "$BRANCH" "$AFTER_COMMIT"
 git reset --hard "$AFTER_COMMIT"
-echo "Deployed commit: $(git rev-parse HEAD)"
+DEPLOYED_COMMIT="$(git rev-parse HEAD)"
+echo "Deployed commit: ${DEPLOYED_COMMIT}"
+
+if [ "$DEPLOYED_COMMIT" != "$AFTER_COMMIT" ]; then
+  echo "Working tree did not update to expected commit."
+  exit 1
+fi
 
 declare -a services_to_build=()
 needs_up=false
 
-if contains_path '^(server/|docker-compose\.yml|\.env\.example)$'; then
+if [ "$FORCE_REBUILD" = "true" ] || contains_path '^(server/|docker-compose\.yml|\.env\.example)$'; then
   services_to_build+=("server")
   needs_up=true
 fi
 
-if contains_path '^(frontend/site/|docker-compose\.yml|\.env\.example)$'; then
+if [ "$FORCE_REBUILD" = "true" ] || contains_path '^(frontend/site/|docker-compose\.yml|\.env\.example)$'; then
   services_to_build+=("site")
   needs_up=true
 fi
 
-if contains_path '^(frontend/admin/|docker-compose\.yml|\.env\.example)$'; then
+if [ "$FORCE_REBUILD" = "true" ] || contains_path '^(frontend/admin/|docker-compose\.yml|\.env\.example)$'; then
   services_to_build+=("admin")
   needs_up=true
 fi
@@ -184,5 +200,8 @@ fi
 
 log "Service status"
 compose_cmd ps
+
+log "Deployed revision"
+git --no-pager log -1 --oneline
 
 rm -f "$CHANGED_FILE_LIST"

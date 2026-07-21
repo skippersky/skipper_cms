@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ResponsiveImage from '../../components/ResponsiveImage.vue'
+import FloatingContact from '../../components/FloatingContact.vue'
 import { t } from '../../i18n'
 
 const productImages = [
@@ -11,6 +12,8 @@ const productImages = [
 
 <template>
   <main>
+    <FloatingContact />
+
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
