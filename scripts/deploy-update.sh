@@ -107,8 +107,12 @@ echo "Branch: ${BRANCH}"
 git remote -v
 
 log "Fetching ${REMOTE}/${BRANCH}"
-BEFORE_COMMIT="$(git rev-parse HEAD)"
-echo "Current commit: ${BEFORE_COMMIT}"
+CURRENT_COMMIT="$(git rev-parse HEAD)"
+BEFORE_COMMIT="${DEPLOY_BASE_COMMIT:-$CURRENT_COMMIT}"
+echo "Current commit: ${CURRENT_COMMIT}"
+if [ "$BEFORE_COMMIT" != "$CURRENT_COMMIT" ]; then
+  echo "Diff base commit: ${BEFORE_COMMIT}"
+fi
 retry_git fetch --prune "$REMOTE" "${BRANCH}:refs/remotes/${REMOTE}/${BRANCH}"
 
 if ! git rev-parse --verify "${REMOTE}/${BRANCH}" >/dev/null 2>&1; then
@@ -150,6 +154,13 @@ echo "Deployed commit: ${DEPLOYED_COMMIT}"
 if [ "$DEPLOYED_COMMIT" != "$AFTER_COMMIT" ]; then
   echo "Working tree did not update to expected commit."
   exit 1
+fi
+
+if [ "${DEPLOY_REEXECED:-false}" != "true" ] && contains_path '^scripts/deploy-update\.sh$'; then
+  log "Deploy script was updated, restarting with the new script"
+  export DEPLOY_BASE_COMMIT="$BEFORE_COMMIT"
+  export DEPLOY_REEXECED=true
+  exec "$0"
 fi
 
 declare -a services_to_build=()
