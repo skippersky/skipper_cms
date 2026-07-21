@@ -6,6 +6,7 @@ BRANCH="${BRANCH:-main}"
 REMOTE="${REMOTE:-origin}"
 GIT_TIMEOUT_SECONDS="${GIT_TIMEOUT_SECONDS:-120}"
 FORCE_REBUILD="${FORCE_REBUILD:-false}"
+REBUILD_SERVICES="${REBUILD_SERVICES:-}"
 LOG_FILE="${LOG_FILE:-}"
 
 log() {
@@ -111,6 +112,19 @@ has_changed_file() {
   return 1
 }
 
+requested_service() {
+  local service="$1"
+  local requested
+
+  for requested in $REBUILD_SERVICES; do
+    if [ "$requested" = "$service" ]; then
+      return 0
+    fi
+  done
+
+  return 1
+}
+
 if ! command_exists git; then
   die "git was not found. Please install git first."
 fi
@@ -161,10 +175,11 @@ fi
 AFTER_COMMIT="$(git rev-parse FETCH_HEAD)"
 echo "Remote commit:  ${AFTER_COMMIT}"
 
-if [ "$BEFORE_COMMIT" = "$AFTER_COMMIT" ] && [ "$FORCE_REBUILD" != "true" ]; then
+if [ "$BEFORE_COMMIT" = "$AFTER_COMMIT" ] && [ "$FORCE_REBUILD" != "true" ] && [ -z "$REBUILD_SERVICES" ]; then
   log "No code changes detected"
   echo "Already deployed commit: ${BEFORE_COMMIT}"
   echo "Tip: run FORCE_REBUILD=true $0 to rebuild containers from the current code."
+  echo "Tip: run REBUILD_SERVICES=\"site\" $0 to rebuild selected services only."
   compose_cmd ps
   exit 0
 fi
@@ -203,17 +218,17 @@ fi
 declare -a services_to_build=()
 needs_up=false
 
-if [ "$FORCE_REBUILD" = "true" ] || has_changed_path "server" || has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
+if [ "$FORCE_REBUILD" = "true" ] || requested_service "server" || has_changed_path "server" || has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
   services_to_build+=("server")
   needs_up=true
 fi
 
-if [ "$FORCE_REBUILD" = "true" ] || has_changed_path "frontend/site" || has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
+if [ "$FORCE_REBUILD" = "true" ] || requested_service "site" || has_changed_path "frontend/site" || has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
   services_to_build+=("site")
   needs_up=true
 fi
 
-if [ "$FORCE_REBUILD" = "true" ] || has_changed_path "frontend/admin" || has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
+if [ "$FORCE_REBUILD" = "true" ] || requested_service "admin" || has_changed_path "frontend/admin" || has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
   services_to_build+=("admin")
   needs_up=true
 fi
