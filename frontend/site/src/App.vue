@@ -66,7 +66,12 @@ onBeforeUnmount(() => {
   </Transition>
   <router-view />
   <footer class="site-footer">
-    <span>Copyright © 2012-{{ currentYear }} 深圳市恒展五金科技有限公司. All Rights Reserved.</span>
+    <p>
+      &copy; {{ currentYear }} 恒展五金 版权所有 |
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
+        粤ICP备2023134156号-1
+      </a>
+    </p>
   </footer>
 </template>
 
@@ -193,6 +198,21 @@ onBeforeUnmount(() => {
   font-size: 14px;
   line-height: 1.6;
   text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-footer a:hover,
+.site-footer a:focus {
+  color: $color-accent-deep;
+  text-decoration: underline;
 }
 
 @media (min-width: $breakpoint-lg) {
