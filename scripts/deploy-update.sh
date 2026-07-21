@@ -6,10 +6,32 @@ BRANCH="${BRANCH:-main}"
 REMOTE="${REMOTE:-origin}"
 GIT_TIMEOUT_SECONDS="${GIT_TIMEOUT_SECONDS:-120}"
 FORCE_REBUILD="${FORCE_REBUILD:-false}"
+LOG_FILE="${LOG_FILE:-}"
 
 log() {
+  local line="[$(date '+%H:%M:%S')] ==> $*"
   echo ""
-  echo "==> $*"
+  echo "$line"
+  if [ -n "$LOG_FILE" ]; then
+    echo "$line" >> "$LOG_FILE"
+  fi
+}
+
+warn() {
+  local line="[$(date '+%H:%M:%S')] [WARN] $*"
+  echo "$line"
+  if [ -n "$LOG_FILE" ]; then
+    echo "$line" >> "$LOG_FILE"
+  fi
+}
+
+die() {
+  local line="[$(date '+%H:%M:%S')] [ERROR] $*"
+  echo "$line" >&2
+  if [ -n "$LOG_FILE" ]; then
+    echo "$line" >> "$LOG_FILE"
+  fi
+  exit 1
 }
 
 command_exists() {
@@ -22,8 +44,7 @@ compose_cmd() {
   elif command_exists docker-compose; then
     docker-compose "$@"
   else
-    echo "Docker Compose was not found. Please install docker compose plugin or docker-compose."
-    exit 1
+    die "Docker Compose was not found. Please install docker compose plugin or docker-compose."
   fi
 }
 
@@ -33,8 +54,7 @@ compose_build_plain() {
   elif command_exists docker-compose; then
     docker-compose build "$@"
   else
-    echo "Docker Compose was not found. Please install docker compose plugin or docker-compose."
-    exit 1
+    die "Docker Compose was not found. Please install docker compose plugin or docker-compose."
   fi
 }
 
@@ -44,8 +64,7 @@ compose_build_no_cache_plain() {
   elif command_exists docker-compose; then
     docker-compose build --no-cache "$@"
   else
-    echo "Docker Compose was not found. Please install docker compose plugin or docker-compose."
-    exit 1
+    die "Docker Compose was not found. Please install docker compose plugin or docker-compose."
   fi
 }
 
@@ -55,10 +74,10 @@ retry_git() {
 
   until timeout "$GIT_TIMEOUT_SECONDS" git -c http.version=HTTP/1.1 "$@"; do
     if [ "$attempt" -ge "$max_attempts" ]; then
-      echo "Git command failed after ${max_attempts} attempts."
+      warn "Git command failed after ${max_attempts} attempts."
       return 1
     fi
-    echo "Git network command failed. Retrying in $((attempt * 3)) seconds... (${attempt}/${max_attempts})"
+    warn "Git network command failed. Retrying in $((attempt * 3)) seconds... (${attempt}/${max_attempts})"
     sleep $((attempt * 3))
     attempt=$((attempt + 1))
   done
@@ -93,18 +112,15 @@ has_changed_file() {
 }
 
 if ! command_exists git; then
-  echo "git was not found. Please install git first."
-  exit 1
+  die "git was not found. Please install git first."
 fi
 
 if ! command_exists docker; then
-  echo "docker was not found. Please install docker first."
-  exit 1
+  die "docker was not found. Please install docker first."
 fi
 
 if [ ! -d "$APP_DIR" ]; then
-  echo "${APP_DIR} does not exist. Run scripts/deploy-init.sh first."
-  exit 1
+  die "${APP_DIR} does not exist. Run scripts/deploy-init.sh first."
 fi
 
 cd "$APP_DIR"
@@ -120,7 +136,7 @@ if [ ! -d ".git" ]; then
   echo "  sudo mv skipper-cms skipper-cms.bak.\$(date +%Y%m%d%H%M%S)"
   echo "  sudo git clone --depth 1 https://github.com/skippersky/skipper_cms.git skipper-cms"
   echo "  sudo cp skipper-cms.bak.*/.env skipper-cms/.env"
-  exit 2
+  die "Cannot continue without a Git repository."
 fi
 
 log "Repository"
@@ -136,11 +152,10 @@ echo "Current commit: ${CURRENT_COMMIT}"
 if [ "$BEFORE_COMMIT" != "$CURRENT_COMMIT" ]; then
   echo "Diff base commit: ${BEFORE_COMMIT}"
 fi
-retry_git fetch "$REMOTE" "$BRANCH"
+retry_git fetch "$REMOTE" "$BRANCH" || die "Unable to fetch ${REMOTE}/${BRANCH}. Please check GitHub network connectivity."
 
 if ! git rev-parse --verify FETCH_HEAD >/dev/null 2>&1; then
-  echo "No FETCH_HEAD reference is available. Cannot determine what to deploy."
-  exit 1
+  die "No FETCH_HEAD reference is available. Cannot determine what to deploy."
 fi
 
 AFTER_COMMIT="$(git rev-parse FETCH_HEAD)"
@@ -175,8 +190,7 @@ DEPLOYED_COMMIT="$(git rev-parse HEAD)"
 echo "Deployed commit: ${DEPLOYED_COMMIT}"
 
 if [ "$DEPLOYED_COMMIT" != "$AFTER_COMMIT" ]; then
-  echo "Working tree did not update to expected commit."
-  exit 1
+  die "Working tree did not update to expected commit."
 fi
 
 if [ "${DEPLOY_REEXECED:-false}" != "true" ] && has_changed_file "scripts/deploy-update.sh"; then
@@ -207,6 +221,14 @@ fi
 if has_changed_file "docker-compose.yml" || has_changed_path "scripts" || has_changed_file "docs/NGINX_REVERSE_PROXY.md"; then
   needs_up=true
 fi
+
+log "Deploy plan"
+if [ "${#services_to_build[@]}" -gt 0 ]; then
+  echo "Services to build: ${services_to_build[*]}"
+else
+  echo "Services to build: none"
+fi
+echo "Apply compose up: ${needs_up}"
 
 if [ "${#services_to_build[@]}" -gt 0 ]; then
   log "Building changed services: ${services_to_build[*]}"
