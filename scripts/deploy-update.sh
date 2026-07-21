@@ -136,14 +136,14 @@ echo "Current commit: ${CURRENT_COMMIT}"
 if [ "$BEFORE_COMMIT" != "$CURRENT_COMMIT" ]; then
   echo "Diff base commit: ${BEFORE_COMMIT}"
 fi
-retry_git fetch --prune "$REMOTE" "${BRANCH}:refs/remotes/${REMOTE}/${BRANCH}"
+retry_git fetch "$REMOTE" "$BRANCH"
 
-if ! git rev-parse --verify "${REMOTE}/${BRANCH}" >/dev/null 2>&1; then
-  echo "No ${REMOTE}/${BRANCH} reference is available. Cannot determine what to deploy."
+if ! git rev-parse --verify FETCH_HEAD >/dev/null 2>&1; then
+  echo "No FETCH_HEAD reference is available. Cannot determine what to deploy."
   exit 1
 fi
 
-AFTER_COMMIT="$(git rev-parse "${REMOTE}/${BRANCH}")"
+AFTER_COMMIT="$(git rev-parse FETCH_HEAD)"
 echo "Remote commit:  ${AFTER_COMMIT}"
 
 if [ "$BEFORE_COMMIT" = "$AFTER_COMMIT" ] && [ "$FORCE_REBUILD" != "true" ]; then
