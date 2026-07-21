@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Phone } from 'lucide-vue-next'
 import { reactive, ref } from 'vue'
 import { t } from '../../i18n'
 import { createInquiry } from '../../services/site-api'
@@ -14,6 +15,29 @@ const form = reactive({
 const submitting = ref(false)
 const feedback = ref('')
 const feedbackType = ref<'success' | 'error'>('success')
+const phoneCopied = ref(false)
+let phoneToastTimer: number | undefined
+
+const directorPhone = '13652397982'
+const directorPhoneLabel = '136 5239 7982'
+const presaleContacts = [
+  { label: '华南区售前顾问', qr: '/wechat-service-qr.png' },
+  { label: '华东区售前顾问', qr: '/wechat-service-qr.png' },
+  { label: '技术方案支持', qr: '/wechat-service-qr.png' },
+]
+
+async function copyDirectorPhone() {
+  try {
+    await navigator.clipboard.writeText(directorPhone)
+    phoneCopied.value = true
+    window.clearTimeout(phoneToastTimer)
+    phoneToastTimer = window.setTimeout(() => {
+      phoneCopied.value = false
+    }, 1500)
+  } catch {
+    window.location.href = `tel:${directorPhone}`
+  }
+}
 
 async function submitInquiry() {
   feedback.value = ''
@@ -59,6 +83,36 @@ async function submitInquiry() {
       <div class="container">
         <h1>{{ t.contact.title }}</h1>
         <p class="lead">{{ t.contact.lead }}</p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container contact-channel-panel">
+        <div class="director-hotline">
+          <h2>销售总监专线</h2>
+          <a
+            class="director-phone"
+            :href="`tel:${directorPhone}`"
+            aria-label="拨打总经理专线 136 5239 7982"
+            @click.prevent="copyDirectorPhone"
+          >
+            <span>{{ directorPhoneLabel }}</span>
+            <Phone :size="20" color="#3B82F6" stroke-width="2.2" aria-hidden="true" />
+          </a>
+          <p>工作日 9:00-18:00 · 官方认证</p>
+        </div>
+
+        <div class="presale-qr-grid">
+          <article v-for="item in presaleContacts" :key="item.label" class="presale-card" role="figure">
+            <img :src="item.qr" :alt="`${item.label}企业微信二维码`" width="140" height="140" loading="lazy" />
+            <p>{{ item.label }}</p>
+          </article>
+        </div>
+
+        <p class="official-note">以上通道均为企业官方认证联系方式，请放心联络</p>
+
+        <Transition name="toast">
+          <div v-if="phoneCopied" class="copy-toast" role="status">号码已复制</div>
+        </Transition>
       </div>
     </section>
     <section class="section">
@@ -113,6 +167,139 @@ h1 {
   max-width: 760px;
   color: $color-text-muted;
   line-height: 1.7;
+}
+
+.contact-channel-panel {
+  position: relative;
+  display: grid;
+  gap: 1.5rem;
+  width: min(100% - 32px, 1200px);
+  max-width: 1200px;
+  margin-inline: auto;
+  padding: 3rem;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.director-hotline {
+  display: grid;
+  align-content: center;
+  gap: 0.75rem;
+}
+
+.director-hotline h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.director-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: fit-content;
+  min-height: 3rem;
+  color: #1f2937;
+  font-family: "DIN", "Roboto Mono", monospace;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.director-phone:hover,
+.director-phone:focus {
+  color: #111827;
+}
+
+.director-hotline p,
+.presale-card p,
+.official-note {
+  margin: 0;
+}
+
+.director-hotline p {
+  color: #6b7280;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.presale-qr-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.presale-card {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.presale-card:hover,
+.presale-card:focus-within {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.presale-card img {
+  width: 8.75rem;
+  height: 8.75rem;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.presale-card p {
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.official-note {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.copy-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 2rem;
+  z-index: 30;
+  min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  border-radius: 8px;
+  color: #ffffff;
+  background: #111827;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transform: translateX(-50%);
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translate(-50%, 0.5rem);
 }
 
 .contact-grid {
@@ -205,6 +392,20 @@ button:disabled {
 }
 
 @media (min-width: $breakpoint-lg) {
+  .contact-channel-panel {
+    grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+    align-items: center;
+  }
+
+  .presale-qr-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .official-note {
+    grid-column: 1 / -1;
+    margin-top: 0.5rem;
+  }
+
   .contact-grid {
     grid-template-columns: 1fr 420px;
   }
