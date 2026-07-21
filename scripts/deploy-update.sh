@@ -216,25 +216,22 @@ if [ "${DEPLOY_REEXECED:-false}" != "true" ] && has_changed_file "scripts/deploy
 fi
 
 declare -a services_to_build=()
-needs_up=false
+compose_all=false
 
 if [ "$FORCE_REBUILD" = "true" ] || requested_service "server" || has_changed_path "server" || has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
   services_to_build+=("server")
-  needs_up=true
 fi
 
 if [ "$FORCE_REBUILD" = "true" ] || requested_service "site" || has_changed_path "frontend/site" || has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
   services_to_build+=("site")
-  needs_up=true
 fi
 
 if [ "$FORCE_REBUILD" = "true" ] || requested_service "admin" || has_changed_path "frontend/admin" || has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
   services_to_build+=("admin")
-  needs_up=true
 fi
 
-if has_changed_file "docker-compose.yml" || has_changed_path "scripts" || has_changed_file "docs/NGINX_REVERSE_PROXY.md"; then
-  needs_up=true
+if has_changed_file "docker-compose.yml" || has_changed_file ".env.example"; then
+  compose_all=true
 fi
 
 log "Deploy plan"
@@ -243,7 +240,7 @@ if [ "${#services_to_build[@]}" -gt 0 ]; then
 else
   echo "Services to build: none"
 fi
-echo "Apply compose up: ${needs_up}"
+echo "Apply compose up all: ${compose_all}"
 
 if [ "${#services_to_build[@]}" -gt 0 ]; then
   log "Building changed services: ${services_to_build[*]}"
@@ -262,9 +259,12 @@ if [ "${#services_to_build[@]}" -gt 0 ]; then
   fi
 fi
 
-if [ "$needs_up" = true ]; then
-  log "Applying compose changes"
+if [ "$compose_all" = true ]; then
+  log "Applying compose changes to all services"
   compose_cmd up -d
+elif [ "${#services_to_build[@]}" -gt 0 ]; then
+  log "Restarting changed services only: ${services_to_build[*]}"
+  compose_cmd up -d --no-deps "${services_to_build[@]}"
 else
   log "No deployable service changes detected"
 fi
