@@ -59,7 +59,7 @@ async function copyPhone() {
           <span class="phone-title">{{ phoneLabel }}</span>
           <button class="phone-number" type="button" :aria-label="`${phoneLabel} ${formattedPhone}`" @click="copyPhone">
             <span>{{ formattedPhone }}</span>
-            <span class="copy-mark" :class="{ show: copied }">✓</span>
+            <span class="copy-mark" :class="{ show: copied }">OK</span>
           </button>
         </span>
       </div>
