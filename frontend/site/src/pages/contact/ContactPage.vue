@@ -33,7 +33,7 @@ const submittingText = '\u63d0\u4ea4\u4e2d...'
 const qrAltSuffix = '\u4f01\u4e1a\u5fae\u4fe1\u4e8c\u7ef4\u7801'
 const presaleContacts = [
   { label: '\u534e\u5357\u533a\u552e\u524d\u987e\u95ee', qr: '/wechat-service-qr.png' },
-  { label: '\u534e\u4e1c\u533a\u552e\u524d\u987e\u95ee', qr: '/wechat-service-qr.png' },
+  { label: '\u534e\u4e1c\u533a\u552e\u524d\u987e\u95ee', qr: '/wechat-presale-east-qr.png' },
   { label: '\u6280\u672f\u65b9\u6848\u652f\u6301', qr: '/wechat-service-qr.png' },
 ]
 
