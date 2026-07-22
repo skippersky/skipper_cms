@@ -120,8 +120,10 @@ async function copyPhone() {
   border: 1px solid rgba(47, 155, 179, 0.22);
   border-radius: 28px;
   color: #183d48;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 14px 36px rgba(47, 91, 109, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(226, 232, 240, 0.84)),
+    rgba(255, 255, 255, 0.9);
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(16px);
   cursor: pointer;
   transition: transform $motion-mechanical-normal $motion-easing-linear,
@@ -134,8 +136,8 @@ async function copyPhone() {
 .float-button:focus,
 .float-item.active .float-button {
   border-color: rgba(102, 207, 160, 0.72);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(238, 255, 247, 0.94));
-  box-shadow: 0 22px 54px rgba(47, 91, 109, 0.22), 0 8px 22px rgba(102, 207, 160, 0.16);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(219, 234, 254, 0.9));
+  box-shadow: 0 22px 54px rgba(15, 23, 42, 0.18), 0 8px 22px rgba(37, 99, 235, 0.12);
   transform: translateY(-2px);
 }
 
@@ -154,8 +156,8 @@ async function copyPhone() {
   height: 72px;
   border-radius: 999px;
   color: #ffffff;
-  background: linear-gradient(180deg, #66cfa0, #2f9bb3);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38), 0 10px 24px rgba(47, 155, 179, 0.22);
+  background: linear-gradient(135deg, #2563eb, #22c7d8);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38), 0 10px 24px rgba(37, 99, 235, 0.2);
 }
 
 .float-button img {
@@ -255,7 +257,7 @@ async function copyPhone() {
   height: 20px;
   border-radius: 999px;
   color: #ffffff;
-  background: #66cfa0;
+  background: #2563eb;
   opacity: 0;
   transform: scale(0.72);
   transition: opacity 160ms cubic-bezier(0.4, 0, 0.2, 1),

@@ -58,7 +58,9 @@ const drawerOpen = ref(false)
 /* MOBILE-FIRST */
 .product-head {
   border-bottom: 1px solid $color-line;
-  background: linear-gradient(135deg, #f7fcff, #f2fff8);
+  background:
+    radial-gradient(circle at 88% 0%, rgba(34, 199, 216, 0.16), transparent 30%),
+    linear-gradient(135deg, #f8fafc, #e5ebf1);
 }
 
 h1 {
@@ -77,7 +79,7 @@ h1 {
   gap: 8px;
   border: 1px solid $color-line;
   color: $color-text;
-  background: #ffffff;
+  background: linear-gradient(180deg, #ffffff, #eef2f6);
   font: inherit;
 }
 
@@ -95,9 +97,11 @@ h1 {
   overflow: hidden;
   padding: 20px;
   border: 1px solid $color-line;
-  background: #ffffff;
-  box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
-  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(226, 232, 240, 0.82)),
+    #ffffff;
+  box-shadow: $shadow-metal;
+  border-radius: 16px;
 }
 
 .product-card::before {
@@ -132,12 +136,13 @@ th,
 td {
   min-height: 44px;
   padding: 12px;
-  border-bottom: 1px solid $color-line;
+  border-bottom: 1px solid rgba(100, 116, 139, 0.18);
   text-align: left;
 }
 
 th {
   color: $color-accent-deep;
+  font-family: $font-data;
 }
 
 .filter-drawer {
@@ -148,8 +153,8 @@ th {
   gap: 12px;
   padding: 20px 16px 28px;
   border-top: 1px solid $color-line;
-  background: #ffffff;
-  box-shadow: 0 -18px 44px rgba(47, 91, 109, 0.12);
+  background: linear-gradient(180deg, #ffffff, #eef2f6);
+  box-shadow: 0 -18px 44px rgba(15, 23, 42, 0.12);
   border-radius: 18px 18px 0 0;
 }
 
@@ -163,8 +168,9 @@ th {
   bottom: 16px;
   z-index: 25;
   padding: 0 18px;
-  border-color: #48b98b;
-  background: linear-gradient(180deg, #8ee5bc, $color-accent);
+  border-color: rgba(37, 99, 235, 0.28);
+  color: #ffffff;
+  background: linear-gradient(135deg, $color-accent-deep, $color-accent);
   font-weight: 800;
 }
 
@@ -200,9 +206,11 @@ th {
     height: fit-content;
     padding: 18px;
     border: 1px solid $color-line;
-    background: #ffffff;
-    box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
-    border-radius: 18px;
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(226, 232, 240, 0.8)),
+      #ffffff;
+    box-shadow: $shadow-metal;
+    border-radius: 16px;
   }
 
   .product-list {

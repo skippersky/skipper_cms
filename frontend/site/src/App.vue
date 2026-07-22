@@ -89,9 +89,11 @@ onBeforeUnmount(() => {
   min-height: 64px;
   padding: 0 16px;
   border-bottom: 1px solid $color-line;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 10px 28px rgba(47, 91, 109, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(241, 245, 249, 0.84)),
+    rgba(248, 250, 252, 0.88);
+  backdrop-filter: blur(18px) saturate(150%);
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.08);
 }
 
 .brand {
@@ -114,7 +116,7 @@ onBeforeUnmount(() => {
   place-items: center;
   border: 1px solid $color-line;
   color: $color-text;
-  background: #ffffff;
+  background: linear-gradient(180deg, #ffffff, #eef2f6);
 }
 
 .desktop-nav {
@@ -133,7 +135,9 @@ onBeforeUnmount(() => {
   align-content: start;
   gap: 6px;
   padding: 24px 16px;
-  background: rgba(246, 252, 252, 0.98);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(226, 232, 240, 0.98)),
+    #f8fafc;
 }
 
 .mobile-nav a {
@@ -170,9 +174,9 @@ onBeforeUnmount(() => {
 .lang-button:hover,
 .lang-button:focus,
 .lang-button.active {
-  color: #0f2f28;
-  background: linear-gradient(180deg, #8ee5bc, $color-accent);
-  box-shadow: 0 8px 20px rgba(102, 207, 160, 0.2);
+  color: #ffffff;
+  background: linear-gradient(135deg, $color-accent-deep, $color-accent);
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.2);
   transform: translateY(-1px);
 }
 
@@ -193,7 +197,9 @@ onBeforeUnmount(() => {
   padding: 20px 16px;
   border-top: 1px solid $color-line;
   color: $color-text-muted;
-  background: rgba(255, 255, 255, 0.86);
+  background:
+    linear-gradient(180deg, rgba(248, 250, 252, 0.9), rgba(226, 232, 240, 0.82)),
+    #f8fafc;
   font-family: $font-data;
   font-size: 14px;
   line-height: 1.6;

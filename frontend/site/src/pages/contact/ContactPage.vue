@@ -20,10 +20,21 @@ let phoneToastTimer: number | undefined
 
 const directorPhone = '13652397982'
 const directorPhoneLabel = '136 5239 7982'
+const directorTitle = '\u9500\u552e\u603b\u76d1\u4e13\u7ebf'
+const directorAriaLabel = '\u62e8\u6253\u603b\u7ecf\u7406\u4e13\u7ebf 136 5239 7982'
+const directorNote = '\u5de5\u4f5c\u65e5 9:00-18:00 \u00b7 \u5b98\u65b9\u8ba4\u8bc1'
+const officialNote = '\u4ee5\u4e0a\u901a\u9053\u5747\u4e3a\u4f01\u4e1a\u5b98\u65b9\u8ba4\u8bc1\u8054\u7cfb\u65b9\u5f0f\uff0c\u8bf7\u653e\u5fc3\u8054\u7edc'
+const copiedText = '\u53f7\u7801\u5df2\u590d\u5236'
+const contactRequiredText = '\u8bf7\u586b\u5199\u8054\u7cfb\u4eba'
+const phoneOrEmailRequiredText = '\u8bf7\u81f3\u5c11\u586b\u5199\u7535\u8bdd\u6216\u90ae\u7bb1'
+const inquirySuccessText = '\u7559\u8a00\u5df2\u63d0\u4ea4\uff0c\u6211\u4eec\u4f1a\u5c3d\u5feb\u4e0e\u60a8\u8054\u7cfb'
+const inquiryErrorText = '\u63d0\u4ea4\u5931\u8d25\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5'
+const submittingText = '\u63d0\u4ea4\u4e2d...'
+const qrAltSuffix = '\u4f01\u4e1a\u5fae\u4fe1\u4e8c\u7ef4\u7801'
 const presaleContacts = [
-  { label: '华南区售前顾问', qr: '/wechat-service-qr.png' },
-  { label: '华东区售前顾问', qr: '/wechat-service-qr.png' },
-  { label: '技术方案支持', qr: '/wechat-service-qr.png' },
+  { label: '\u534e\u5357\u533a\u552e\u524d\u987e\u95ee', qr: '/wechat-service-qr.png' },
+  { label: '\u534e\u4e1c\u533a\u552e\u524d\u987e\u95ee', qr: '/wechat-service-qr.png' },
+  { label: '\u6280\u672f\u65b9\u6848\u652f\u6301', qr: '/wechat-service-qr.png' },
 ]
 
 async function copyDirectorPhone() {
@@ -43,12 +54,12 @@ async function submitInquiry() {
   feedback.value = ''
   if (!form.contactName.trim()) {
     feedbackType.value = 'error'
-    feedback.value = '请填写联系人'
+    feedback.value = contactRequiredText
     return
   }
   if (!form.phone.trim() && !form.email.trim()) {
     feedbackType.value = 'error'
-    feedback.value = '请至少填写电话或邮箱'
+    feedback.value = phoneOrEmailRequiredText
     return
   }
 
@@ -67,10 +78,10 @@ async function submitInquiry() {
     form.email = ''
     form.message = ''
     feedbackType.value = 'success'
-    feedback.value = '留言已提交，我们会尽快与您联系'
+    feedback.value = inquirySuccessText
   } catch (error) {
     feedbackType.value = 'error'
-    feedback.value = error instanceof Error ? error.message : '提交失败，请稍后再试'
+    feedback.value = error instanceof Error ? error.message : inquiryErrorText
   } finally {
     submitting.value = false
   }
@@ -85,36 +96,38 @@ async function submitInquiry() {
         <p class="lead">{{ t.contact.lead }}</p>
       </div>
     </section>
+
     <section class="section">
       <div class="container contact-channel-panel">
         <div class="director-hotline">
-          <h2>销售总监专线</h2>
+          <h2>{{ directorTitle }}</h2>
           <a
             class="director-phone"
             :href="`tel:${directorPhone}`"
-            aria-label="拨打总经理专线 136 5239 7982"
+            :aria-label="directorAriaLabel"
             @click.prevent="copyDirectorPhone"
           >
             <span>{{ directorPhoneLabel }}</span>
-            <Phone :size="20" color="#3B82F6" stroke-width="2.2" aria-hidden="true" />
+            <Phone :size="20" color="#2563eb" stroke-width="2.2" aria-hidden="true" />
           </a>
-          <p>工作日 9:00-18:00 · 官方认证</p>
+          <p>{{ directorNote }}</p>
         </div>
 
         <div class="presale-qr-grid">
           <article v-for="item in presaleContacts" :key="item.label" class="presale-card" role="figure">
-            <img :src="item.qr" :alt="`${item.label}企业微信二维码`" width="140" height="140" loading="lazy" />
+            <img :src="item.qr" :alt="`${item.label}${qrAltSuffix}`" width="140" height="140" loading="lazy" />
             <p>{{ item.label }}</p>
           </article>
         </div>
 
-        <p class="official-note">以上通道均为企业官方认证联系方式，请放心联络</p>
+        <p class="official-note">{{ officialNote }}</p>
 
         <Transition name="toast">
-          <div v-if="phoneCopied" class="copy-toast" role="status">号码已复制</div>
+          <div v-if="phoneCopied" class="copy-toast" role="status">{{ copiedText }}</div>
         </Transition>
       </div>
     </section>
+
     <section class="section">
       <div class="container contact-grid">
         <div class="map">
@@ -131,7 +144,7 @@ async function submitInquiry() {
           <textarea v-model="form.message" :placeholder="t.contact.message"></textarea>
           <p v-if="feedback" class="form-feedback" :class="feedbackType">{{ feedback }}</p>
           <button class="tap-target" type="submit" :disabled="submitting">
-            {{ submitting ? '提交中...' : t.contact.submit }}
+            {{ submitting ? submittingText : t.contact.submit }}
           </button>
           <a class="tel tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">{{ t.contact.sample }}</a>
         </form>
@@ -146,15 +159,19 @@ async function submitInquiry() {
 /* MOBILE-FIRST */
 .contact-head {
   border-bottom: 1px solid $color-line;
-  background: linear-gradient(135deg, #f7fcff, #f2fff8);
+  background:
+    radial-gradient(circle at 88% 0%, rgba(34, 199, 216, 0.16), transparent 30%),
+    linear-gradient(135deg, #f8fafc, #e5ebf1);
 }
 
 .map,
 .contact-form {
   border: 1px solid $color-line;
-  background: #ffffff;
-  box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
-  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(226, 232, 240, 0.78)),
+    #ffffff;
+  box-shadow: $shadow-metal;
+  border-radius: 16px;
 }
 
 h1 {
@@ -177,8 +194,29 @@ h1 {
   max-width: 1200px;
   margin-inline: auto;
   padding: 3rem;
-  border-radius: 12px;
-  background: #f9fafb;
+  border: 1px solid rgba(100, 116, 139, 0.2);
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(226, 232, 240, 0.82)),
+    #f8fafc;
+  box-shadow: $shadow-metal;
+}
+
+.contact-channel-panel::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.56), transparent 34%, rgba(34, 199, 216, 0.08)),
+    repeating-linear-gradient(90deg, rgba(100, 116, 139, 0.08) 0 1px, transparent 1px 28px);
+  pointer-events: none;
+}
+
+.director-hotline,
+.presale-qr-grid,
+.official-note {
+  position: relative;
 }
 
 .director-hotline {
@@ -235,16 +273,21 @@ h1 {
   justify-items: center;
   gap: 1rem;
   padding: 1.5rem;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(100, 116, 139, 0.16);
+  border-radius: 12px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(241, 245, 249, 0.9)),
+    #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .presale-card:hover,
 .presale-card:focus-within {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: rgba(37, 99, 235, 0.28);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
   transform: translateY(-2px);
 }
 
@@ -317,7 +360,7 @@ h1 {
   color: $color-text-muted;
   font-family: $font-data;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(15, 52, 96, 0.18)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(15, 23, 42, 0.26)),
     url("/contact-map.webp") center / cover no-repeat;
 }
 
@@ -328,7 +371,7 @@ h1 {
   padding: 16px;
   border: 1px solid rgba(255, 255, 255, 0.72);
   background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 16px 40px rgba(47, 91, 109, 0.16);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
   backdrop-filter: blur(10px);
   border-radius: 14px;
 }
@@ -348,7 +391,7 @@ textarea {
   width: 100%;
   border: 1px solid $color-line;
   color: $color-text;
-  background: #f8fcfd;
+  background: #f8fafc;
   padding: 0 14px;
 }
 
@@ -362,9 +405,9 @@ button,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #48b98b;
-  color: #0f2f28;
-  background: linear-gradient(180deg, #8ee5bc, $color-accent);
+  border: 1px solid rgba(37, 99, 235, 0.28);
+  color: #ffffff;
+  background: linear-gradient(135deg, $color-accent-deep, $color-accent);
   font-weight: 800;
 }
 
@@ -383,7 +426,7 @@ button:disabled {
 
 .form-feedback.success {
   color: #14533c;
-  background: rgba(102, 207, 160, 0.18);
+  background: rgba(34, 197, 94, 0.14);
 }
 
 .form-feedback.error {

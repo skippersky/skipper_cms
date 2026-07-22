@@ -15,8 +15,11 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    linear-gradient(90deg, rgba(47, 155, 179, 0.045) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(102, 207, 160, 0.04) 1px, transparent 1px),
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.92), transparent 28rem),
+    radial-gradient(circle at 88% 12%, rgba(34, 199, 216, 0.16), transparent 22rem),
+    linear-gradient(90deg, rgba(100, 116, 139, 0.08) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(135deg, #f8fafc 0%, #eef2f6 52%, #e5ebf1 100%),
     $mobile-bg;
   background-size: 28px 28px;
 }
@@ -78,7 +81,7 @@ img {
 .contact-form,
 .desktop-filter,
 .hero-media {
-  border-radius: 18px;
+  border-radius: 16px;
   transition: transform $motion-mechanical-normal $motion-easing-linear,
     box-shadow $motion-mechanical-normal $motion-easing-linear,
     border-color $motion-mechanical-normal $motion-easing-linear,
@@ -90,9 +93,9 @@ img {
 .why-grid article:hover,
 .partner-grid span:hover,
 .timeline article:hover {
-  transform: translateY(-5px);
-  border-color: rgba(102, 207, 160, 0.72);
-  box-shadow: 0 24px 70px rgba(47, 91, 109, 0.16), 0 8px 24px rgba(102, 207, 160, 0.12);
+  transform: translateY(-4px);
+  border-color: rgba(37, 99, 235, 0.36);
+  box-shadow: $shadow-metal-hover;
 }
 
 .metric-card:active,
@@ -106,8 +109,11 @@ img {
 @media (min-width: $breakpoint-lg) {
   body {
     background:
-      linear-gradient(90deg, rgba(47, 155, 179, 0.045) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(102, 207, 160, 0.04) 1px, transparent 1px),
+      radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.95), transparent 34rem),
+      radial-gradient(circle at 88% 10%, rgba(34, 199, 216, 0.16), transparent 26rem),
+      linear-gradient(90deg, rgba(100, 116, 139, 0.08) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+      linear-gradient(135deg, #f8fafc 0%, #eef2f6 48%, #e5ebf1 100%),
       $color-bg;
     background-size: 36px 36px;
   }

@@ -33,7 +33,9 @@ import { t } from '../../i18n'
 /* MOBILE-FIRST */
 .company-hero {
   border-bottom: 1px solid $color-line;
-  background: linear-gradient(135deg, #f7fcff, #f2fff8);
+  background:
+    radial-gradient(circle at 82% 0%, rgba(34, 199, 216, 0.16), transparent 30%),
+    linear-gradient(135deg, #f8fafc, #e5ebf1);
 }
 
 .eyebrow {
@@ -65,9 +67,11 @@ h1 {
 .story {
   padding: 22px;
   border: 1px solid $color-line;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
-  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(226, 232, 240, 0.78)),
+    rgba(255, 255, 255, 0.88);
+  box-shadow: $shadow-metal;
+  border-radius: 16px;
 }
 
 .timeline {
@@ -80,9 +84,11 @@ h1 {
   padding: 20px;
   border-left: 4px solid $color-accent;
   border-top: 1px solid $color-line;
-  background: #ffffff;
-  box-shadow: 0 14px 34px rgba(47, 91, 109, 0.08);
-  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(226, 232, 240, 0.82)),
+    #ffffff;
+  box-shadow: $shadow-metal;
+  border-radius: 16px;
 }
 
 @media (min-width: $breakpoint-lg) {

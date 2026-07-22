@@ -104,8 +104,10 @@ const productImages = [
   min-height: 58vh;
   padding: 56px 0 40px;
   background:
-    radial-gradient(circle at 80% 10%, rgba(102, 207, 160, 0.22), transparent 30%),
-    linear-gradient(135deg, #f7fcff 0%, #edf8fb 52%, #f6fff7 100%);
+    linear-gradient(115deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0) 42%),
+    radial-gradient(circle at 82% 8%, rgba(34, 199, 216, 0.2), transparent 30%),
+    radial-gradient(circle at 10% 70%, rgba(37, 99, 235, 0.12), transparent 34%),
+    linear-gradient(135deg, #f8fafc 0%, #eef2f6 52%, #dfe7ef 100%);
   border-bottom: 1px solid $color-line;
 }
 
@@ -128,6 +130,7 @@ const productImages = [
   font-family: $font-data;
   font-size: 14px;
   font-weight: 800;
+  letter-spacing: 0.08em;
 }
 
 h1 {
@@ -161,10 +164,10 @@ h2 {
   justify-content: center;
   width: fit-content;
   padding: 0 20px;
-  border: 1px solid #48b98b;
-  color: #0f2f28;
-  background: linear-gradient(180deg, #8ee5bc, $color-accent);
-  box-shadow: 0 10px 24px rgba(102, 207, 160, 0.24);
+  border: 1px solid rgba(37, 99, 235, 0.28);
+  color: #ffffff;
+  background: linear-gradient(135deg, $color-accent-deep, $color-accent);
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.18);
   font-weight: 800;
 }
 
@@ -181,8 +184,10 @@ h2 {
 .why-grid article,
 .partner-grid span {
   border: 1px solid $color-line;
-  background: rgba(255, 255, 255, 0.86);
-  box-shadow: 0 16px 40px rgba(47, 91, 109, 0.08);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(226, 232, 240, 0.76)),
+    rgba(255, 255, 255, 0.84);
+  box-shadow: $shadow-metal;
   backdrop-filter: blur(14px);
 }
 
@@ -192,8 +197,18 @@ h2 {
   min-height: 280px;
   border-radius: 24px;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(226, 242, 246, 0.9)),
-    repeating-linear-gradient(90deg, rgba(47, 155, 179, 0.12) 0 1px, transparent 1px 20px);
+    linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(203, 213, 225, 0.74)),
+    repeating-linear-gradient(90deg, rgba(100, 116, 139, 0.13) 0 1px, transparent 1px 20px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), $shadow-metal;
+}
+
+.hero-media::after {
+  position: absolute;
+  inset: 12px;
+  content: "";
+  border: 1px solid rgba(255, 255, 255, 0.54);
+  border-radius: 18px;
+  pointer-events: none;
 }
 
 .hero-media :deep(img) {
@@ -210,7 +225,7 @@ h2 {
 
 .metric-card {
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(242, 255, 248, 0.86)),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(226, 232, 240, 0.82)),
     #ffffff;
 }
 
@@ -247,7 +262,8 @@ dt {
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: contain;
-  background: #eef8fb;
+  background:
+    linear-gradient(135deg, #f8fafc, #e2e8f0);
 }
 
 .product-card > div {
