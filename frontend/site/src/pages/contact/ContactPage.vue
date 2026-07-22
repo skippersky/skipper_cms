@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Phone } from 'lucide-vue-next'
-import { reactive, ref } from 'vue'
-import { t } from '../../i18n'
+import { computed, reactive, ref } from 'vue'
+import { currentLocale, t, type Locale } from '../../i18n'
 import { createInquiry } from '../../services/site-api'
 
 const form = reactive({
@@ -20,22 +20,88 @@ let phoneToastTimer: number | undefined
 
 const directorPhone = '13652397982'
 const directorPhoneLabel = '136 5239 7982'
-const directorTitle = '\u9500\u552e\u603b\u76d1\u4e13\u7ebf'
-const directorAriaLabel = '\u62e8\u6253\u603b\u7ecf\u7406\u4e13\u7ebf 136 5239 7982'
-const directorNote = '\u5de5\u4f5c\u65e5 9:00-18:00 \u00b7 \u5b98\u65b9\u8ba4\u8bc1'
-const officialNote = '\u4ee5\u4e0a\u901a\u9053\u5747\u4e3a\u4f01\u4e1a\u5b98\u65b9\u8ba4\u8bc1\u8054\u7cfb\u65b9\u5f0f\uff0c\u8bf7\u653e\u5fc3\u8054\u7edc'
-const copiedText = '\u53f7\u7801\u5df2\u590d\u5236'
-const contactRequiredText = '\u8bf7\u586b\u5199\u8054\u7cfb\u4eba'
-const phoneOrEmailRequiredText = '\u8bf7\u81f3\u5c11\u586b\u5199\u7535\u8bdd\u6216\u90ae\u7bb1'
-const inquirySuccessText = '\u7559\u8a00\u5df2\u63d0\u4ea4\uff0c\u6211\u4eec\u4f1a\u5c3d\u5feb\u4e0e\u60a8\u8054\u7cfb'
-const inquiryErrorText = '\u63d0\u4ea4\u5931\u8d25\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5'
-const submittingText = '\u63d0\u4ea4\u4e2d...'
-const qrAltSuffix = '\u4f01\u4e1a\u5fae\u4fe1\u4e8c\u7ef4\u7801'
 const presaleContacts = [
-  { label: '\u534e\u5357\u533a\u552e\u524d\u987e\u95ee', qr: '/wechat-service-qr.png' },
-  { label: '\u534e\u4e1c\u533a\u552e\u524d\u987e\u95ee', qr: '/wechat-presale-east-qr.png' },
-  { label: '\u6280\u672f\u65b9\u6848\u652f\u6301', qr: '/wechat-service-qr.png' },
-]
+  { key: 'south', qr: '/wechat-service-qr.png' },
+  { key: 'east', qr: '/wechat-presale-east-qr.png' },
+  { key: 'technical', qr: '/wechat-service-qr.png' },
+] as const
+
+const contactChannelCopy = {
+  zh: {
+    directorTitle: '\u9500\u552e\u603b\u76d1\u4e13\u7ebf',
+    directorAriaLabel: '\u62e8\u6253\u603b\u7ecf\u7406\u4e13\u7ebf 136 5239 7982',
+    directorNote: '\u5de5\u4f5c\u65e5 9:00-18:00 \u00b7 \u5b98\u65b9\u8ba4\u8bc1',
+    officialNote: '\u4ee5\u4e0a\u901a\u9053\u5747\u4e3a\u4f01\u4e1a\u5b98\u65b9\u8ba4\u8bc1\u8054\u7cfb\u65b9\u5f0f\uff0c\u8bf7\u653e\u5fc3\u8054\u7edc',
+    copiedText: '\u53f7\u7801\u5df2\u590d\u5236',
+    contactRequiredText: '\u8bf7\u586b\u5199\u8054\u7cfb\u4eba',
+    phoneOrEmailRequiredText: '\u8bf7\u81f3\u5c11\u586b\u5199\u7535\u8bdd\u6216\u90ae\u7bb1',
+    inquirySuccessText: '\u7559\u8a00\u5df2\u63d0\u4ea4\uff0c\u6211\u4eec\u4f1a\u5c3d\u5feb\u4e0e\u60a8\u8054\u7cfb',
+    inquiryErrorText: '\u63d0\u4ea4\u5931\u8d25\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5',
+    submittingText: '\u63d0\u4ea4\u4e2d...',
+    qrAltSuffix: '\u4f01\u4e1a\u5fae\u4fe1\u4e8c\u7ef4\u7801',
+    labels: {
+      south: '\u534e\u5357\u533a\u552e\u524d\u987e\u95ee',
+      east: '\u534e\u4e1c\u533a\u552e\u524d\u987e\u95ee',
+      technical: '\u6280\u672f\u65b9\u6848\u652f\u6301',
+    },
+  },
+  en: {
+    directorTitle: 'Sales Director Hotline',
+    directorAriaLabel: 'Call general manager hotline 136 5239 7982',
+    directorNote: 'Weekdays 9:00-18:00 · Officially verified',
+    officialNote: 'All channels above are officially verified company contacts. Please feel free to reach out.',
+    copiedText: 'Number copied',
+    contactRequiredText: 'Please enter a contact name',
+    phoneOrEmailRequiredText: 'Please enter at least a phone number or email',
+    inquirySuccessText: 'Inquiry submitted. We will contact you soon.',
+    inquiryErrorText: 'Submission failed. Please try again later.',
+    submittingText: 'Submitting...',
+    qrAltSuffix: ' enterprise WeCom QR code',
+    labels: {
+      south: 'South China Pre-sales Consultant',
+      east: 'East China Pre-sales Consultant',
+      technical: 'Technical Solution Support',
+    },
+  },
+  hi: {
+    directorTitle: 'Sales Director Hotline',
+    directorAriaLabel: 'Call general manager hotline 136 5239 7982',
+    directorNote: 'Weekdays 9:00-18:00 · Officially verified',
+    officialNote: 'All channels above are officially verified company contacts. Please feel free to reach out.',
+    copiedText: 'Number copied',
+    contactRequiredText: 'Please enter a contact name',
+    phoneOrEmailRequiredText: 'Please enter at least a phone number or email',
+    inquirySuccessText: 'Inquiry submitted. We will contact you soon.',
+    inquiryErrorText: 'Submission failed. Please try again later.',
+    submittingText: 'Submitting...',
+    qrAltSuffix: ' enterprise WeCom QR code',
+    labels: {
+      south: 'South China Pre-sales Consultant',
+      east: 'East China Pre-sales Consultant',
+      technical: 'Technical Solution Support',
+    },
+  },
+  de: {
+    directorTitle: 'Direktleitung Vertriebsleitung',
+    directorAriaLabel: 'Direktleitung 136 5239 7982 anrufen',
+    directorNote: 'Werktags 9:00-18:00 · Offiziell verifiziert',
+    officialNote: 'Alle oben genannten Kanäle sind offiziell verifizierte Unternehmenskontakte.',
+    copiedText: 'Nummer kopiert',
+    contactRequiredText: 'Bitte geben Sie eine Kontaktperson ein',
+    phoneOrEmailRequiredText: 'Bitte geben Sie mindestens Telefon oder E-Mail ein',
+    inquirySuccessText: 'Anfrage gesendet. Wir melden uns zeitnah.',
+    inquiryErrorText: 'Senden fehlgeschlagen. Bitte versuchen Sie es später erneut.',
+    submittingText: 'Wird gesendet...',
+    qrAltSuffix: ' Unternehmens-WeCom-QR-Code',
+    labels: {
+      south: 'Pre-Sales-Beratung Südchina',
+      east: 'Pre-Sales-Beratung Ostchina',
+      technical: 'Technische Lösungsunterstützung',
+    },
+  },
+} as const
+
+const channelCopy = computed(() => contactChannelCopy[currentLocale.value as Locale])
 
 async function copyDirectorPhone() {
   try {
@@ -54,12 +120,12 @@ async function submitInquiry() {
   feedback.value = ''
   if (!form.contactName.trim()) {
     feedbackType.value = 'error'
-    feedback.value = contactRequiredText
+    feedback.value = channelCopy.value.contactRequiredText
     return
   }
   if (!form.phone.trim() && !form.email.trim()) {
     feedbackType.value = 'error'
-    feedback.value = phoneOrEmailRequiredText
+    feedback.value = channelCopy.value.phoneOrEmailRequiredText
     return
   }
 
@@ -78,10 +144,10 @@ async function submitInquiry() {
     form.email = ''
     form.message = ''
     feedbackType.value = 'success'
-    feedback.value = inquirySuccessText
+    feedback.value = channelCopy.value.inquirySuccessText
   } catch (error) {
     feedbackType.value = 'error'
-    feedback.value = error instanceof Error ? error.message : inquiryErrorText
+    feedback.value = error instanceof Error ? error.message : channelCopy.value.inquiryErrorText
   } finally {
     submitting.value = false
   }
@@ -100,30 +166,30 @@ async function submitInquiry() {
     <section class="section">
       <div class="container contact-channel-panel">
         <div class="director-hotline">
-          <h2>{{ directorTitle }}</h2>
+          <h2>{{ channelCopy.directorTitle }}</h2>
           <a
             class="director-phone"
             :href="`tel:${directorPhone}`"
-            :aria-label="directorAriaLabel"
+            :aria-label="channelCopy.directorAriaLabel"
             @click.prevent="copyDirectorPhone"
           >
             <span>{{ directorPhoneLabel }}</span>
             <Phone :size="20" color="#2563eb" stroke-width="2.2" aria-hidden="true" />
           </a>
-          <p>{{ directorNote }}</p>
+          <p>{{ channelCopy.directorNote }}</p>
         </div>
 
         <div class="presale-qr-grid">
-          <article v-for="item in presaleContacts" :key="item.label" class="presale-card" role="figure">
-            <img :src="item.qr" :alt="`${item.label}${qrAltSuffix}`" width="140" height="140" loading="lazy" />
-            <p>{{ item.label }}</p>
+          <article v-for="item in presaleContacts" :key="item.key" class="presale-card" role="figure">
+            <img :src="item.qr" :alt="`${channelCopy.labels[item.key]}${channelCopy.qrAltSuffix}`" width="140" height="140" loading="lazy" />
+            <p>{{ channelCopy.labels[item.key] }}</p>
           </article>
         </div>
 
-        <p class="official-note">{{ officialNote }}</p>
+        <p class="official-note">{{ channelCopy.officialNote }}</p>
 
         <Transition name="toast">
-          <div v-if="phoneCopied" class="copy-toast" role="status">{{ copiedText }}</div>
+          <div v-if="phoneCopied" class="copy-toast" role="status">{{ channelCopy.copiedText }}</div>
         </Transition>
       </div>
     </section>
@@ -144,7 +210,7 @@ async function submitInquiry() {
           <textarea v-model="form.message" :placeholder="t.contact.message"></textarea>
           <p v-if="feedback" class="form-feedback" :class="feedbackType">{{ feedback }}</p>
           <button class="tap-target" type="submit" :disabled="submitting">
-            {{ submitting ? submittingText : t.contact.submit }}
+            {{ submitting ? channelCopy.submittingText : t.contact.submit }}
           </button>
           <a class="tel tap-target" href="https://huenghang.1688.com/" target="_blank" rel="noopener">{{ t.contact.sample }}</a>
         </form>
